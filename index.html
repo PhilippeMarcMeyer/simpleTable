@@ -10,60 +10,82 @@
 
     <title>SimpleGrid</title>
 		<style>
-  /* css by  Vikas Chauhan : http://codepen.io/vikasford/pen/Cltyj slightly modified*/    
-table{
- width:600px;
- }
+  /* css inspired by  Vikas Chauhan : http://codepen.io/vikasford/pen/Cltyj greatly modified*/    
             
-.flat-table {
+            #zone{
+  background: #eee;
+               padding:1px; 
+            }
+           #main {
+               width:600px;
+                margin-top:50px;
+                margin-left:50px;
+
+            }
+            #main p{
+                
+                               text-align:center;
+               font-size: 2em;
+               font-weight: bold;
+            }
+            
+ 
+.grid-table {
 		margin-bottom: 20px;
 		border-collapse:collapse;
 		font-family: 'Lato', Calibri, Arial, sans-serif;
-		border: none;
                 border-radius: 3px;
                -webkit-border-radius: 3px;
                -moz-border-radius: 3px;
 	}
-	.flat-table th, .flat-table td {
-		box-shadow: inset 0 -1px rgba(0,0,0,0.25), 
-			inset 0 1px rgba(0,0,0,0.25);
-	}
-	.flat-table th {
-		font-weight: normal;
-		-webkit-font-smoothing: antialiased;
-		padding: 1em;
-		color: rgba(0,0,0,0.45);
-		text-shadow: 0 0 1px rgba(0,0,0,0.1);
-		font-size: 1.5em;
-	}
-    .flat-table th:hover {
+
+    .grid-table .doscroll tr:hover {
+         background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+         background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+         background-image: linear-gradient(#E3F7FF,#B7E7FB);
+
+        }
+
+
+
+    .grid-table th:hover {
         cursor: pointer;
         cursor:hand;
+             background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+             background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+             background-image: linear-gradient(#E3F7FF,#B7E7FB);
+
     }
-	.flat-table td {
-		color: #f7f7f7;
+	.grid-table th {
+		color: #000;
+		padding: 0.7em 1em 0.7em 1.15em;
+		font-size: 1em;
+        text-align: center;
+        border:1px solid #E0E1E3;
+
+        background-image: linear-gradient(#FFFFFF,#F5F6F8);
+
+	}
+    .grid-table td {
+		color: #000;
 		padding: 0.7em 1em 0.7em 1.15em;
 		text-shadow: 0 0 1px rgba(255,255,255,0.1);
-		font-size: 1.4em;
+		font-size: 1em;
         text-align: center;
+         border-right:1px solid #E3E4E6; 
+        border-left: :1px solid #E3E4E6;
+
+  border-bottom:1px solid #E0E1E3;
+
 	}
-	.flat-table tr {
-		-webkit-transition: background 0.3s, box-shadow 0.3s;
-		-moz-transition: background 0.3s, box-shadow 0.3s;
-		transition: background 0.3s, box-shadow 0.3s;
+
+	.grid-table-1 {
+		background: #fff;
 	}
+
             
-                        
 
-	.flat-table-1 {
-		background: #8899aa;
-	}
-    
-    .flat-table-1 tr:nth-of-type(odd) { 
-		background: #99aabb;
-	}
-
-	.flat-table-1 tr:hover {
+	.grid-table-1 tr:hover {
 		background: rgba(0,0,0,0.19);
 	}
 
@@ -74,19 +96,22 @@ table{
   </head>
 
   <body>
-
-<div id="zone"></div>
-
+<div id="main">
+    <p>Demo Grid</p>
+        <div id="zone"></div>
+    </div>
 <script>
 // This json strings should be provides by the back-end : here for demonstration purpose
 
- var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"first name"},{"name":"lastname","type":"string","title":"Last name"},{"name":"age","type":"integer","title":"Age"}]}';
+ var aConfig ='{"width":"600px","height":"400px"}';
+ var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"first name","width":"250px"},{"name":"lastname","type":"string","title":"Last name","width":"250px"},{"name":"age","type":"integer","title":"Age","width":"100px"}]}';
 
-var aData = '{"arr":[{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Doe","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47}]}';
+var aData = '{"arr":[{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Doe","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47},{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Doe","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47}]}';
     
     
     
-var myGrid = new SimpleGrid("zone","tableId","flat-table flat-table-1");
+var myGrid = new SimpleGrid("zone","tableId","grid-table grid-table-1");
+myGrid.SetConfig(aConfig); 
 myGrid.SetHeader(aHeader);
 myGrid.SetData(aData);
 myGrid.Draw();

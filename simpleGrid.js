@@ -10,6 +10,10 @@ function SimpleGrid (zoneId,tableId,tableClass){
     this.header={};
     this.data={};
     this.dataKeys=[];
+    
+    this.SetConfig=function(json_str){
+		this.config = JSON.parse(json_str);
+    }
     this.SetData=function(json_str){
 		this.data = JSON.parse(json_str);
     }
@@ -69,11 +73,24 @@ function SimpleGrid (zoneId,tableId,tableClass){
 			this.zone.innerHTML = "";
 			var doc = this.doc; // For speed 
             var aTable = doc.createElement("table");
-            var att = document.createAttribute("class");       
+            var att = document.createAttribute("class");  
+            var athead,aHead,att,elem,txt;
             att.value = this.tableClass;                
             aTable.setAttributeNode(att); 
 			var elem,txt,aHead,aLine,lineObj,lineObjLen;
 			// Building Header
+             athead = doc.createElement("div");
+             att = document.createAttribute("class"); 
+             att.value = "stayFixed";  
+             athead.setAttributeNode(att); 
+               if(this.config.width){
+                    att = document.createAttribute("style"); 
+                    var aWidth = parseInt(this.config.width);
+                    aWidth = aWidth - 14;
+                    att.value = "width:"+aWidth+"px;";
+                    athead.setAttributeNode(att); 
+             }
+        
 			aHead = doc.createElement("tr");
 			for(var i=0;i<this.header.arr.length;i++){
 				elem = doc.createElement("th");
@@ -81,20 +98,41 @@ function SimpleGrid (zoneId,tableId,tableClass){
                 att = document.createAttribute("id");
                 att.value = this.tableId+"_"+"col"+i;
                 elem.setAttributeNode(att); 
+                
+                if(this.header.arr[i].width){
+                    att = document.createAttribute("style");
+                    att.value ="width:"+this.header.arr[i].width+";"; 
+                    elem.setAttributeNode(att); 
+                }
                 // Adding the title of each column header
 				txt = doc.createTextNode(this.header.arr[i].title); 
 				elem.appendChild(txt); 
                 // adding the column header to the header
 				aHead.appendChild(elem);
 			}
-            aTable.appendChild(aHead); // adding the header (tr) to the table
+              athead.appendChild(aHead); 
+            aTable.appendChild(athead); // adding the header (tr) to the table
      var self = this;
 			// Building Body
+        var atbody = doc.createElement("div");
+             att = document.createAttribute("class"); 
+             att.value = "doscroll";  
+         atbody.setAttributeNode(att); 
+                if(this.config.height){
+                    att = document.createAttribute("style"); 
+                    var anHeight = parseInt(this.config.height);
+                    anHeight = anHeight - 40;
+                    att.value = "height:"+anHeight+"px;max-height:"+anHeight+"px;overflow-y: scroll;";
+                     atbody.setAttributeNode(att); 
+                }
+
+            
 		for(var i=0;i<this.data.arr.length;i++){
 			aLine= doc.createElement("tr");
             
 			lineObj = this.data.arr[i];
-            // Looping thru properties of each date object
+            // Looping thru properties of each data object
+            var j =0;
 			Object.keys(lineObj).forEach(function(key) {
                 if(i===0){
                      self.dataKeys.push(key);
@@ -102,11 +140,19 @@ function SimpleGrid (zoneId,tableId,tableClass){
 				elem = doc.createElement("td");
 				txt = doc.createTextNode(lineObj[key]); 
 				elem.appendChild(txt);
+                if(self.header.arr[j].width){
+                    att = document.createAttribute("style");
+                    att.value ="width:"+self.header.arr[j].width+";"; 
+                    elem.setAttributeNode(att); 
+                }
 				aLine.appendChild(elem);
+                j++;
 			});
-            aTable.appendChild(aLine);// adding the line (tr) to the table
+            atbody.appendChild(aLine);// adding the line (tr) to the table
 		}
-        
+        aTable.appendChild(atbody);// adding the line (tr) to the table
+        if(this.config.width)
+            this.zone.style="width:"+this.config.width+";padding-bottom:0px;";
         this.zone.appendChild(aTable);  
         var anId;
         var self = this;
