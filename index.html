@@ -12,31 +12,33 @@
 		<style>
   /* css inspired by  Vikas Chauhan : http://codepen.io/vikasford/pen/Cltyj greatly modified*/    
             
-            #zone{
-  background: #eee;
-               padding:1px; 
-            }
-           #main {
-               width:600px;
-                margin-top:50px;
-                margin-left:50px;
-
-            }
-            #main p{
-                
-                               text-align:center;
-               font-size: 2em;
-               font-weight: bold;
-            }
+#zone{
+   background: #eee;
+   padding:1px; 
+}
+#zone b{
+    padding:3px;
+    margin-bottom:-8px;
+}
+#main {
+    width:600px;
+    margin-top:50px;
+    margin-left:50px;
+    font-family: Arial,Tahoma, Calibri, sans-serif;
+}
+            
+#main p{
+   text-align:center;
+   font-size: 2em;
+   font-weight: bold;
+}
             
  
 .grid-table {
 		margin-bottom: 20px;
 		border-collapse:collapse;
-		font-family: 'Lato', Calibri, Arial, sans-serif;
-                border-radius: 3px;
-               -webkit-border-radius: 3px;
-               -moz-border-radius: 3px;
+		font-family: Arial,Tahoma, Calibri, sans-serif;
+        border:1px solid #ccc;
 	}
 
     .grid-table .doscroll tr:hover {
@@ -49,7 +51,7 @@
 
 
     .grid-table th:hover {
-        cursor: pointer;
+        cursor:pointer;
         cursor:hand;
              background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
              background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
@@ -61,19 +63,24 @@
 		padding: 0.7em 1em 0.7em 1.15em;
 		font-size: 1em;
         text-align: center;
-        border:1px solid #E0E1E3;
-
+        border-top:1px solid #E0E1E3;
+        border-left:1px solid #E0E1E3;
+        border-bottom:1px solid #E0E1E3;
         background-image: linear-gradient(#FFFFFF,#F5F6F8);
 
 	}
+            
+               .grid-table th:first-child {
+                   border-left:none;
+            }
     .grid-table td {
 		color: #000;
 		padding: 0.7em 1em 0.7em 1.15em;
-		text-shadow: 0 0 1px rgba(255,255,255,0.1);
+		/*text-shadow: 0 0 1px rgba(255,255,255,0.1);*/
 		font-size: 1em;
         text-align: center;
-         border-right:1px solid #E3E4E6; 
-        border-left: :1px solid #E3E4E6;
+        border-right:1px solid #E3E4E6; 
+       border-left: :1px solid #E3E4E6;
 
   border-bottom:1px solid #E0E1E3;
 
@@ -88,6 +95,28 @@
 	.grid-table-1 tr:hover {
 		background: rgba(0,0,0,0.19);
 	}
+          
+
+/* scroll bars by Kushagra Agarwal*/
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 17px;
+	background-color: #E3F7FF;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #B7E7FB;
+}
 
 
 		</style>
@@ -97,16 +126,16 @@
 
   <body>
 <div id="main">
-    <p>Demo Grid</p>
+    <p>Simple Grid Demo</p>
         <div id="zone"></div>
     </div>
 <script>
 // This json strings should be provides by the back-end : here for demonstration purpose
 
- var aConfig ='{"width":"600px","height":"400px"}';
- var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"first name","width":"250px"},{"name":"lastname","type":"string","title":"Last name","width":"250px"},{"name":"age","type":"integer","title":"Age","width":"100px"}]}';
+ var aConfig ='{"width":"600px","height":"416px"}';
+ var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"250px"},{"name":"lastname","type":"string","title":"Last name","width":"250px"},{"name":"age","type":"integer","title":"Age","width":"100px"}]}';
 
-var aData = '{"arr":[{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Doe","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47},{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Doe","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47}]}';
+var aData = '{"arr":[{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Miller","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47},{"firstname":"Willem","lastname":"Schmidt","age":54},{"firstname":"Henry","lastname":"Fenwick","age":48},{"firstname":"Helen","lastname":"Carter","age":28},{"firstname":"Christine","lastname":"Jansen","age":37},{"firstname":"Edward","lastname":"SilverHand","age":34}]}';
     
     
     
