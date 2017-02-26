@@ -54,6 +54,28 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      }else if(type==='string'){
                         elA = elA.toLowerCase();
                         elB = elB.toLowerCase();  
+                     }else if(type==='dd/mm/yyyy'){ // French date
+                        var n1  = 0;
+					    var n2  = 0; 
+		            	n1 = (elA.substring(3,5)*100);
+						n1 +=(elA.substring(0,2)*1);
+						n1 +=(elA.substring(6,10)*10000); 
+		            	n2 = (elB.substring(3,5)*100);
+						n2 +=(elB.substring(0,2)*1);
+						n2 +=(elB.substring(6,10)*10000); 
+                        elA = n1;
+                        elB = n2;
+                     }else if(type==='mm/dd/yyyy'){ // English date
+                        var n1  = 0;
+					    var n2  = 0; 
+		            	n1 = (elA.substring(3,5)*1);
+						n1 +=(elA.substring(0,2)*100);
+						n1 +=(elA.substring(6,10)*10000); 
+		            	n2 = (elB.substring(3,5)*1);
+						n2 +=(elB.substring(0,2)*100);
+						n2 +=(elB.substring(6,10)*10000); 
+                        elA = n1;
+                        elB = n2;
                      }
                     if(elA <elB){
                         if(sortWay==='up') {return -1;} else {return 1;}

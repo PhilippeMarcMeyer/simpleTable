@@ -21,7 +21,7 @@
     margin-bottom:-8px;
 }
 #main {
-    width:600px;
+    width:700px;
     margin-top:50px;
     margin-left:50px;
     font-family: Arial,Tahoma, Calibri, sans-serif;
@@ -53,9 +53,7 @@
     .grid-table th:hover {
         cursor:pointer;
         cursor:hand;
-             background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
-             background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
-             background-image: linear-gradient(#E3F7FF,#B7E7FB);
+
 
     }
 	.grid-table th {
@@ -63,10 +61,10 @@
 		padding: 0.7em 1em 0.7em 1.15em;
 		font-size: 1em;
         text-align: center;
-        border-top:1px solid #E0E1E3;
+        /*border-top:1px solid #E0E1E3;
         border-left:1px solid #E0E1E3;
-        border-bottom:1px solid #E0E1E3;
-        background-image: linear-gradient(#FFFFFF,#F5F6F8);
+        border-bottom:1px solid #E0E1E3;*/
+        background-image: linear-gradient(#fff,#ddd);
 
 	}
             
@@ -126,16 +124,16 @@
 
   <body>
 <div id="main">
-    <p>Simple Grid Demo</p>
+    <p>Coding Langage Designers</p>
         <div id="zone"></div>
     </div>
 <script>
 // This json strings should be provides by the back-end : here for demonstration purpose
 
- var aConfig ='{"width":"600px","height":"416px"}';
- var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"250px"},{"name":"lastname","type":"string","title":"Last name","width":"250px"},{"name":"age","type":"integer","title":"Age","width":"100px"}]}';
+ var aConfig ='{"width":"700px","height":"316px"}';
+ var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm/dd/yyyy","title":"Birth date","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"}]}';
 
-var aData = '{"arr":[{"firstname":"Philippe","lastname":"Meyer","age":54},{"firstname":"John","lastname":"Doe","age":48},{"firstname":"Martha","lastname":"Miller","age":51},{"firstname":"Eleonor","lastname":"Rigby","age":75},{"firstname":"Edward","lastname":"Norton","age":47},{"firstname":"Willem","lastname":"Schmidt","age":54},{"firstname":"Henry","lastname":"Fenwick","age":48},{"firstname":"Helen","lastname":"Carter","age":28},{"firstname":"Christine","lastname":"Jansen","age":37},{"firstname":"Edward","lastname":"SilverHand","age":34}]}';
+var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":"12-30-1950","langage":"C++"},{"firstname":"Denis","lastname":"Ritchie","birthdate":"09-09-1941","langage":"C"},{"firstname":"Kenneth","lastname":"Thompson","birthdate":"02-04-1943","langage":"Go"},{"firstname":"James","lastname":"Gosling","birthdate":"05-19-1955","langage":"Java"},{"firstname":"Brendan ","lastname":"Eich","birthdate":"07-04-1961","langage":"Javascript"},{"firstname":"Guido","lastname":"Van Rossum","birtdate":"01-31-1956","langage":"Python"},{"firstname":"Yukihiro","lastname":"Matsumoto","birthdate":"04-14-1965","langage":"Ruby"},{"firstname":"Roberto","lastname":"Lerusalimschy","birthdate":"05-21-1960","langage":"Lua"},{"firstname":"Rasmus","lastname":"Lerdorf","birthdate":"11-22-1968","langage":"Php"},{"firstname":"Jean","lastname":"Ichbiah","birthdate":"03-25-1940","langage":"Ada"}]}';
     
     
     
