@@ -8,4 +8,12 @@ I want to build a simple Grid system with typed columns, paginated, sortable, wi
 
 02/25/2017 : Corrected aligment between header and body. Nice looking scrollBars, number of records in a new footer
 
+Here is a demo :
+
+http://philippemeyer.info/demos/simpleGrid/
+
+Philippe MEYER
+
+
+
 
