@@ -10,7 +10,92 @@
 
     <title>SimpleGrid</title>
 		<style>
-  /* css inspired by  Vikas Chauhan : http://codepen.io/vikasford/pen/Cltyj greatly modified*/    
+/* The Modal (background) */
+.modal {
+    font-family: Tahoma,Calibri,Arial,sans-serif;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position:relative;
+    background-color: #fefefe;
+    font-size: 12px;
+    margin: auto;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    border: 3px solid #777;
+    width: 500px;
+    border-radius:6px;
+}
+    
+
+.modal-content label{
+ position:relative;
+ width: 100px;
+ margin-left:20px;
+  padding-bottom: 15px;   
+    }
+    
+.modal-content input[type='text']{
+ position:absolute;
+ width: 140px;
+ left: 125px;
+ margin-bottom: 15px;   
+
+    }
+    
+.modal-content button{
+ position:relative;
+ text-align:center;
+ float:right;
+ padding-left:10px;
+ padding-right:10px;
+ font-size: 14px;
+ font-weight: bold;
+ margin-left:10px;
+    }
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+    
+.modal-content button  {
+    color: #aaaaaa;
+    float: right;
+    font-size: 12px;
+    font-weight: bold;
+}
+.modal-content button:hover,
+.modal-content button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+    
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+      
             
 #zone{
    background: #eee;
@@ -84,8 +169,8 @@
         border-right:1px solid #E3E4E6; 
        border-left: :1px solid #E3E4E6;
         overflow:hidden;
- box-sizing: border-box;
-  border-bottom:1px solid #E0E1E3;
+        box-sizing: border-box;
+        border-bottom:1px solid #E0E1E3;
 
 	}
             
@@ -135,13 +220,14 @@
 
   <body>
 <div id="main">
+    <div id="myModal" class="modal"></div>
     <p>Coding Langage Designers</p>
         <div id="zone"></div>
     </div>
 <script>
 // This json strings should be provides by the back-end : here for demonstration purpose
 
- var aConfig ='{"width":"700px","height":"316px"}';
+ var aConfig ='{"width":"700px","height":"316px","modal":"myModal"}';
  var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm/dd/yyyy","title":"Birth date","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"}]}';
 
 var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":"12-30-1950","langage":"C++"},{"firstname":"Denis","lastname":"Ritchie","birthdate":"09-09-1941","langage":"C"},{"firstname":"Kenneth","lastname":"Thompson","birthdate":"02-04-1943","langage":"Go"},{"firstname":"James","lastname":"Gosling","birthdate":"05-19-1955","langage":"Java"},{"firstname":"Brendan ","lastname":"Eich","birthdate":"07-04-1961","langage":"Javascript"},{"firstname":"Guido","lastname":"Van Rossum","birtdate":"01-31-1956","langage":"Python"},{"firstname":"Yukihiro","lastname":"Matsumoto","birthdate":"04-14-1965","langage":"Ruby"},{"firstname":"Roberto","lastname":"Lerusalimschy","birthdate":"05-21-1960","langage":"Lua"},{"firstname":"Rasmus","lastname":"Lerdorf","birthdate":"11-22-1968","langage":"Php"},{"firstname":"Jean","lastname":"Ichbiah","birthdate":"03-25-1940","langage":"Ada"}]}';
