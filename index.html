@@ -39,6 +39,8 @@
 		border-collapse:collapse;
 		font-family: Arial,Tahoma, Calibri, sans-serif;
         border:1px solid #ccc;
+        box-sizing: border-box;
+
 	}
 
     .grid-table .doscroll tr:hover {
@@ -61,15 +63,17 @@
 		padding: 0.7em 1em 0.7em 1.15em;
 		font-size: 1em;
         text-align: center;
-        /*border-top:1px solid #E0E1E3;
+       border-top:1px solid #E0E1E3;
         border-left:1px solid #E0E1E3;
-        border-bottom:1px solid #E0E1E3;*/
+        border-bottom:1px solid #E0E1E3;
         background-image: linear-gradient(#fff,#ddd);
-
+        overflow:hidden;
+ box-sizing: border-box;
 	}
             
                .grid-table th:first-child {
                    border-left:none;
+                    box-sizing: border-box;
             }
     .grid-table td {
 		color: #000;
@@ -79,10 +83,17 @@
         text-align: center;
         border-right:1px solid #E3E4E6; 
        border-left: :1px solid #E3E4E6;
-
+        overflow:hidden;
+ box-sizing: border-box;
   border-bottom:1px solid #E0E1E3;
 
 	}
+            
+    .grid-table th:hover {
+         background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+         background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+         background-image: linear-gradient(#E3F7FF,#B7E7FB);
+    }
 
 	.grid-table-1 {
 		background: #fff;

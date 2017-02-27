@@ -108,13 +108,14 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                if(this.config.width){
                     att = document.createAttribute("style"); 
                     var aWidth = parseInt(this.config.width);
-                    aWidth = aWidth - 16;
-                    att.value = "width:"+aWidth+"px;overflow-y: hidden;";
+                    aWidth = aWidth - 20;
+                    att.value = "width:"+aWidth+"px;width:"+aWidth+"px;overflow-y: hidden;";
                     athead.setAttributeNode(att); 
              }
         
 			aHead = doc.createElement("tr");
-			for(var i=0;i<this.header.arr.length;i++){
+        var nrCols = this.header.arr.length;
+			for(var i=0;i<nrCols;i++){
 				elem = doc.createElement("th");
                 // Adding an id to each column header
                 att = document.createAttribute("id");
@@ -123,7 +124,9 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 
                 if(this.header.arr[i].width){
                     att = document.createAttribute("style");
-                    att.value ="width:"+this.header.arr[i].width+";"; 
+                    aWidth = parseInt(this.header.arr[i].width);
+                    aWidth = aWidth-(24/nrCols);
+                    att.value ="width:"+aWidth+"px;"; 
                     elem.setAttributeNode(att); 
                 }
                 // Adding the title of each column header
@@ -139,14 +142,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         var atbody = doc.createElement("div");
              att = document.createAttribute("class"); 
              att.value = "doscroll";  
-         atbody.setAttributeNode(att); 
-                if(this.config.height){
+             atbody.setAttributeNode(att); 
                     att = document.createAttribute("style"); 
-                    var anHeight = parseInt(this.config.height);
-                    anHeight = anHeight - 16;
-                    att.value = "height:"+anHeight+"px;max-height:"+anHeight+"px;overflow-y: scroll;";
-                     atbody.setAttributeNode(att); 
-                }
+                    att.value="overflow-y: scroll;";
+
+                    if(this.config.height){
+                        var anHeight = parseInt(this.config.height);
+                        anHeight = anHeight - 24;
+                        att.value = att.value+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
+                         atbody.setAttributeNode(att); 
+                    }
 
         var nrLines=0;    
 		for(var i=0;i<this.data.arr.length;i++){
