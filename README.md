@@ -16,6 +16,26 @@ http://philippemeyer.info/demos/simpleGrid/
 
 Philippe MEYER
 
+Issues to correct :
+
+# Delete all rows and you only create one new row, each subsequent new one replacing the other
+
+# Click outside a row : produces an error
+
+Features to develop :
+
+# Search field
+
+# Correctly typed input fields (ie number, date ...)
+
+# Controls on the input values
+
+# A paginated version
+
+# Calculated fields : for instance price * quantity = to be paid
+
+
+
 
 
 
