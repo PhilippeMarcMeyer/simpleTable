@@ -22,8 +22,6 @@ Philippe MEYER
 
 Features to develop :
 
-- Search field
-
 - Correctly typed input fields (number) . date is done
 
 - Controls on the input values
