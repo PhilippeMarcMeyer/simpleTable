@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">    
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -48,7 +48,7 @@
   padding-bottom: 15px;   
     }
     
-.modal-content input[type='text']{
+.modal-content input[type='text'],.modal-content input[type='date']{
  position:absolute;
  width: 140px;
  left: 125px;
@@ -156,10 +156,10 @@
  box-sizing: border-box;
 	}
             
-               .grid-table th:first-child {
-                   border-left:none;
-                    box-sizing: border-box;
-            }
+   .grid-table th:first-child {
+          border-left:none;
+           box-sizing: border-box;
+    }
     .grid-table td {
 		color: #000;
 		padding: 0.7em 1em 0.7em 1.15em;
@@ -226,9 +226,10 @@
     </div>
 <script>
 // This json strings should be provides by the back-end : here for demonstration purpose
-
+    
+ var aTranslation ='{"New":"Nouveau","Modifying":"Modification","Adding":"Ajouter","Delete":"Supprimer","Cancel":"Annuler","Validate":"Valider"}';
  var aConfig ='{"width":"700px","height":"316px","modal":"myModal"}';
- var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm/dd/yyyy","title":"Birth date","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"}]}';
+ var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"}]}';
 
 var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":"12-30-1950","langage":"C++"},{"firstname":"Denis","lastname":"Ritchie","birthdate":"09-09-1941","langage":"C"},{"firstname":"Kenneth","lastname":"Thompson","birthdate":"02-04-1943","langage":"Go"},{"firstname":"James","lastname":"Gosling","birthdate":"05-19-1955","langage":"Java"},{"firstname":"Brendan ","lastname":"Eich","birthdate":"07-04-1961","langage":"Javascript"},{"firstname":"Guido","lastname":"Van Rossum","birtdate":"01-31-1956","langage":"Python"},{"firstname":"Yukihiro","lastname":"Matsumoto","birthdate":"04-14-1965","langage":"Ruby"},{"firstname":"Roberto","lastname":"Lerusalimschy","birthdate":"05-21-1960","langage":"Lua"},{"firstname":"Rasmus","lastname":"Lerdorf","birthdate":"11-22-1968","langage":"Php"},{"firstname":"Jean","lastname":"Ichbiah","birthdate":"03-25-1940","langage":"Ada"}]}';
     
@@ -236,11 +237,13 @@ var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":
     
 var myGrid = new SimpleGrid("zone","tableId","grid-table grid-table-1");
 myGrid.SetConfig(aConfig); 
+myGrid.SetTranslations(aTranslation);     
 myGrid.SetHeader(aHeader);
 myGrid.SetData(aData);
 myGrid.Draw();
 
 </script>
 
-  </body>
-</html>
+  
+
+</body></html>

@@ -6,11 +6,67 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 	this.tableId = tableId || 'tableId';
 	this.tableClass = tableClass || 'tableClass';
 	this.table;
+    this.translations={};
     this.config={};
     this.header={};
     this.data={};
     this.dataKeys=[];
     this.offset=0;
+    this.html5ImputDateSupport=false;
+    
+     var test = document.createElement("input");
+     test.setAttribute("type", "date");
+     this.html5ImputDateSupport = (test.type !== "text");
+       //this.html5ImputDateSupport=false;
+    
+    this.CreateInput=function(aType,aName,aValue){
+        var doc = this.doc;
+        var html_type,html_value;
+        var elem = doc.createElement("input");
+        var att = doc.createAttribute("type"); 
+        
+        html_value = aValue;
+        html_type = 'text';
+        
+        if(aType==='mm-dd-yyyy' &  this.html5ImputDateSupport){ // English date
+            //            aaaa-mm-jj
+            html_value = aValue.substring(6,10)+"-"+aValue.substring(0,2)+"-"+aValue.substring(3,5)
+            html_type = 'date';
+        }
+        else if(aType==='dd-mm-yyyy' &  this.html5ImputDateSupport){ // French date
+             html_value = aValue.substring(6,10)+"-"+aValue.substring(3,5)+"-"+aValue.substring(0,2)
+            html_type = 'date';
+    
+        }
+        att.value =html_type;  
+        elem.setAttributeNode(att);
+        
+        att = doc.createAttribute("name"); 
+        att.value = aName; 
+        elem.setAttributeNode(att);
+                
+        att = doc.createAttribute("id"); 
+        att.value = aName; 
+        elem.setAttributeNode(att);
+                
+        att = doc.createAttribute("value"); 
+         att.value = html_value;
+        elem.setAttributeNode(att);
+                
+        return elem;
+    }
+    
+    this.SetTranslations=function(json_str){
+        this.translations = JSON.parse(json_str);
+    }
+    
+    this.translate=function(token){
+        var itemTranslated = token
+        if ( this.translations[token]){
+           itemTranslated=  this.translations[token];
+        }
+        return itemTranslated;
+    }
 
     this.SetConfig=function(json_str){
 		this.config = JSON.parse(json_str);
@@ -64,11 +120,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
          }
     
     this.showModal=function(rowId){
+        if (rowId.length===0) return;
         rowId = rowId.replace('tableId_row','');
-        var modalTitle = 'Modifying';
+        var item = '';
+        var modalTitle = this.translate('Modifying');
         var lineOffset = parseInt(rowId);
         if(lineOffset===-1)
-            modalTitle = 'Adding';    
+            modalTitle = this.translate('Adding');   
         this.offset = lineOffset;
         var self = this;
         var ptr =  this.config.modal;
@@ -98,7 +156,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             aH3.appendChild(txt);
             aDiv.appendChild(aH3); 
             
-            var elem;
+            var elem,aValue,aName,aType;
             var nrCols = this.header.arr.length;
 			for(var i=0;i<nrCols;i++){
                 elem = doc.createElement("label");
@@ -106,26 +164,22 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem.appendChild(txt);
                 aDiv.appendChild(elem); 
                 
-                elem = doc.createElement("input");
+             
+               // if(this.html5ImputDateSupport)
+                    
+                      // obj=this.header.arr[i];
+               // type=obj.type;
+           
+              if (lineOffset!=-1)
+                   aValue = this.data.arr[lineOffset][this.header.arr[i].name]; 
+                else
+                   aValue = '';
                 
-                att = doc.createAttribute("type"); 
-                att.value = 'text';  
-                 elem.setAttributeNode(att);
-               // elem.appendChild(att);
+            aName = this.header.arr[i].name;
+            aType = this.header.arr[i].type;
                 
-                att = doc.createAttribute("name"); 
-                att.value = this.header.arr[i].name; 
-                elem.setAttributeNode(att);
-                
-                att = doc.createAttribute("id"); 
-                att.value = this.header.arr[i].name; 
-                elem.setAttributeNode(att);
-                
-                att = doc.createAttribute("value"); 
-                if (lineOffset!=-1)
-                    att.value = this.data.arr[lineOffset][this.header.arr[i].name]; 
-                elem.setAttributeNode(att);
-                
+            elem = this.CreateInput(this.header.arr[i].type,this.header.arr[i].name,aValue)
+          
                 aDiv.appendChild(elem); 
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);
@@ -141,22 +195,38 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 att = doc.createAttribute("id"); 
                 att.value = 'validate'; 
                 elem.setAttributeNode(att);
-                txt = doc.createTextNode('Validate'); 
+                item=this.translate('Validate');
+                txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
                 elem.onclick = function() {
                 var ptr,lineOffset,nrCols;
                 lineOffset = self.offset;
                 if(lineOffset==-1){
                     self.data.arr.push({});
-                    lineOffset = self.header.arr.length-1;
+                    lineOffset = self.data.arr.length-1;
                 }
                 nrCols = self.header.arr.length;
-
+                var val;
 			         for(var i=0;i<nrCols;i++){
+                         val='';
                          ptr = self.doc.getElementById(self.header.arr[i].name);
-                         if(ptr){
-                            self.data.arr[lineOffset][self.header.arr[i].name]=ptr.value; 
-                         }
+                            if(ptr){
+                                 val = ptr.value;
+                                aType = self.header.arr[i].type;
+                                if(aType==='mm-dd-yyyy' &  self.html5ImputDateSupport){ // English date
+                                    //            aaaa-mm-jj
+                                    val= val.substring(5,7)+"-"+val.substring(8,10)+"-"+val.substring(0,4)
+       
+                                }
+                                else if(aType==='dd-mm-yyyy' &  self.html5ImputDateSupport){ // French date
+                                    val= val.substring(8,10)+"-"+val.substring(5,7)+"-"+val.substring(0,4)
+
+
+                                }
+                            }
+                   
+                            self.data.arr[lineOffset][self.header.arr[i].name]=val; 
+                         
                      }
                 
                 self.config.modal.style.display = "none";
@@ -168,7 +238,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 att = doc.createAttribute("id"); 
                 att.value = 'cancel'; 
                 elem.setAttributeNode(att);
-                txt = doc.createTextNode('Cancel'); 
+                item = this.translate('Cancel'); 
+                txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
                 elem.onclick = function() {
                     self.config.modal.style.display = "none";
@@ -177,9 +248,11 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             
                 elem = doc.createElement("button");
                 att = doc.createAttribute("id"); 
+            
                 att.value = 'delete'; 
                 elem.setAttributeNode(att);
-                txt = doc.createTextNode('Delete'); 
+                item = this.translate('Delete'); 
+                txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
                 elem.onclick = function() {
                     var lineOffset = self.offset;
@@ -213,9 +286,10 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     }
     
     this.sort=function(colId){
+        var item='';
         var obj;
         var type;
-        var sortWay;
+        var sortWay='up';
         var offset;
         var self = this;
          for(var i=0;i<this.header.arr.length;i++){
@@ -241,7 +315,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      }else if(type==='string'){
                         elA = elA.toLowerCase();
                         elB = elB.toLowerCase();  
-                     }else if(type==='dd/mm/yyyy'){ // French date
+                     }else if(type==='dd-mm-yyyy'){ // French date
                         var n1  = 0;
 					    var n2  = 0; 
 		            	n1 = (elA.substring(3,5)*100);
@@ -252,7 +326,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 						n2 +=(elB.substring(6,10)*10000); 
                         elA = n1;
                         elB = n2;
-                     }else if(type==='mm/dd/yyyy'){ // English date
+                     }else if(type==='mm-dd-yyyy'){ // English date
                         var n1  = 0;
 					    var n2  = 0; 
 		            	n1 = (elA.substring(3,5)*1);
@@ -399,7 +473,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         att = doc.createAttribute("id"); 
         att.value = 'simpleGrid_add'; 
         elem.setAttributeNode(att);
-        txt = doc.createTextNode('New'); 
+        var item = this.translate('New'); 
+        txt = doc.createTextNode(item); 
         elem.appendChild(txt);
         elem.onclick = function() {
                 self.showModal('-1');
