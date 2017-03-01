@@ -13,6 +13,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.dataKeys=[];
     this.offset=0;
     this.html5ImputDateSupport=false;
+    this.allowSearch=false;
     
      var test = document.createElement("input");
      test.setAttribute("type", "date");
@@ -76,7 +77,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
          var modalPtr;
          if(this.config.modal){
             var modalId = this.config.modal;
-            if(modalId.length!=0){
+            if(modalId.length!==0){
                modalPtr=this.doc.getElementById(modalId);
                if(modalPtr){
                    this.config.booModal=true; 
@@ -90,6 +91,11 @@ function SimpleGrid(zoneId, tableId, tableClass) {
            this.config.booModal=false; 
            this.config.modal=null;
            this.config.modalTitle='none'; 
+        }
+         if(this.config.allowSearch){
+           if(this.config.allowSearch==='yes'){
+                this.allowSearch=true;
+           } 
         }
         
     }
@@ -352,7 +358,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
          //console.log(colId);
     }
     
-    this.Draw=function(){
+    this.Draw=function(objSearch){
+        var searchFor = '';
+        var searchForLower = '';
+
+        if(objSearch){
+            searchFor = objSearch.value;
+            searchForLower = searchFor.toLowerCase();
+
+        }
+            var item;
 			this.zone.innerHTML = "";
 			var doc = this.doc; // For speed 
             var aTable = doc.createElement("table");
@@ -431,16 +446,32 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                     }
 
 
-        var nrLines=0;    
+        var nrLines=0;   
+        var boo_show = true;
 		for(var i=0;i<this.data.arr.length;i++){
             nrLines++;
+            boo_show = false;
+            // Getting the object from the array
+            lineObj = this.data.arr[i];
+
+           if(searchForLower.length>0){
+            Object.keys(lineObj).forEach(function(key) {
+                item = lineObj[key];
+                item = item.toLowerCase();
+                    if (item.indexOf(searchForLower)!==-1){
+                        boo_show = true;
+                    }
+                });
+            }else{
+                 boo_show = true;
+            }
+            
+            if(boo_show){
 			aLine= doc.createElement("tr");
             // adding an id to tr for modals
             att = document.createAttribute("id");
             att.value = this.tableId+"_"+"row"+i;
             aLine.setAttributeNode(att); 
-            // Getting the object from the array
-			lineObj = this.data.arr[i];
             // Looping thru properties of each data object
             var j =0;
 			Object.keys(lineObj).forEach(function(key) {
@@ -457,17 +488,44 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 }
 				aLine.appendChild(elem);
                 j++;
+                
 			});
             atbody.appendChild(aLine);// adding the line (tr) to the table
+            }
 		}
         aTable.appendChild(atbody);// adding the line (tr) to the table
         if(this.config.width)
             this.zone.style="width:"+this.config.width+";border-radius:6px;padding:6px;padding-bottom:6px;border:1px solid black;";
         this.zone.appendChild(aTable);  
+        
+        //Adding the number of records left of the footer
+        
         txt = doc.createTextNode("# "+nrLines); 
         elem = doc.createElement("b");
         elem.appendChild(txt);
         this.zone.appendChild(elem); 
+        
+        if(this.allowSearch){
+            elem = doc.createElement("label");
+            item = this.translate('Search'); 
+            txt = doc.createTextNode(' '+item+' : '); 
+            elem.appendChild(txt);
+            att = doc.createAttribute("style");
+            att.value = 'margin-left:20px;font-style:italic;';
+            elem.setAttributeNode(att);
+            this.zone.appendChild(elem);
+            elem = this.CreateInput('string','sg_search',searchFor);
+            att = doc.createAttribute("style");
+            att.value = 'margin-left:5px;width:200px;margin-top:-10px;border-radius:4px;border : 1px solid #777;';
+            elem.setAttributeNode(att);
+            
+            elem.onkeyup = function() {
+                self.Draw(this); // this will be the this of the input text
+            }
+             this.zone.appendChild(elem);
+        }
+
+        // Creating the 'New' Button right of footer
         
         elem = doc.createElement("button");
         att = doc.createAttribute("id"); 
@@ -480,10 +538,20 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 self.showModal('-1');
             }
         att = doc.createAttribute("style");
-        att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;margin-bottom:-5px;float:right;margin-top:-10px;';
+        att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;';
         elem.setAttributeNode(att);
         this.zone.appendChild(elem);
-    
+        
+       var ptr = this.doc.getElementById('sg_search');
+        if(ptr){
+            var strLength = ptr.value.length;
+            ptr.focus();
+
+            if(strLength>0){
+                ptr.setSelectionRange(strLength, strLength);
+            }
+        }
+        
         var anId;
         var self = this;
         for(var i=0;i<this.header.arr.length;i++){
@@ -493,9 +561,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             this.header.arr[i].ptr.addEventListener("click",function(e){
                var target = (e.target) ? e.target : e.srcElement;
                self.sort(target.id);
-          
             }); // Adding an Event listener 
-            
         }
         
     }
