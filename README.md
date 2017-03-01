@@ -2,6 +2,8 @@
 
 I want to build a simple Grid system with typed columns, paginated, sortable, with a modale to enter or modify data.
 
+02/28/2017 : Bug editing + support of input date (english and french format) + translation feature 
+
 02/27/2017 : Columns seems to be aligned thanks to mathematics 
 A modal is displayed on row click which automaticaly shows a form to modify the row content.
 Delete + add new functionalities.
@@ -16,17 +18,11 @@ http://philippemeyer.info/demos/simpleGrid/
 
 Philippe MEYER
 
-Issues to correct :
-
-- Delete all rows and you only create one new row, each subsequent new one replacing the other
-
-- Click outside a row : produces an error
-
 Features to develop :
 
 - Search field
 
-- Correctly typed input fields (ie number, date ...)
+- Correctly typed input fields (number) . date is done
 
 - Controls on the input values
 
