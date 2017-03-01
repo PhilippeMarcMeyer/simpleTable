@@ -2,6 +2,8 @@
 
 I want to build a simple Grid system with typed columns, paginated, sortable, with a modale to enter or modify data.
 
+03/01/2017 : Added a searching feature (optional)
+
 02/28/2017 : Bug editing + support of input date (english and french format) + translation feature 
 
 02/27/2017 : Columns seems to be aligned thanks to mathematics 
