@@ -33,6 +33,7 @@ SimpleGrid was written in pure javascript with no dependency, for the exercice !
 
 I would love to make a jQuery plugin but for that I've got to pratice a bit (you may help me)
 
+Here is a fully commented example :
 
 ```javascript
 
