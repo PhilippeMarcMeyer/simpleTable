@@ -66,13 +66,11 @@ myGrid.config.save = function(){// Declaring the saving function
     // You got to make your own saving function to localstorage or back-end !
     alert('You got to send this Json string to your backend !\r\n'+json);
 }
-//myGrid.SetTranslations(aTranslation); // Setting translation if needed    
+myGrid.SetTranslations(aTranslation); // Setting translation if needed    
 myGrid.SetHeader(aHeader); // Setting the hearder with names, types and width
 myGrid.SetData(aData); // Setting the data to populate the rows
 myGrid.Draw(); // Drawing the grid in it's zone 
 
-
-</script>
 
 ```
 
