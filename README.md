@@ -37,7 +37,7 @@ Here is a fully commented example :
 
 ```javascript
 
-  // Settings like width and height, le id of the modal zone.  allowSearch gives you a search field
+  // Settings like width and height, the id of the modal zone.  allowSearch gives you a search field
  var aConfig ='{"width":"700px","height":"316px","modal":"myModal","allowSearch":"yes"}';
     
     // Defining the header of the grid : colums names (matching data), types , titles and width
