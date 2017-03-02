@@ -1,0 +1,202 @@
+/* The Modal (background) */
+.modal {
+    font-family: Tahoma,Calibri,Arial,sans-serif;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position:relative;
+    background-color: #fefefe;
+    font-size: 12px;
+    margin: auto;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    border: 3px solid #777;
+    width: 500px;
+    border-radius:6px;
+}
+    
+
+.modal-content label{
+ position:relative;
+ width: 100px;
+ margin-left:20px;
+  padding-bottom: 15px;   
+    }
+    
+.modal-content input[type='text'],.modal-content input[type='date']{
+ position:absolute;
+ width: 140px;
+ left: 125px;
+ margin-bottom: 15px;   
+
+    }
+    
+.modal-content button{
+ position:relative;
+ text-align:center;
+ float:right;
+ padding-left:10px;
+ padding-right:10px;
+ font-size: 14px;
+ font-weight: bold;
+ margin-left:10px;
+    }
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+    
+.modal-content button  {
+    color: #aaaaaa;
+    float: right;
+    font-size: 12px;
+    font-weight: bold;
+}
+.modal-content button:hover,
+.modal-content button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+    
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+      
+            
+#zone{
+   background: #eee;
+   padding:1px; 
+}
+#zone b{
+    padding:3px;
+    margin-bottom:-8px;
+}
+#main {
+    width:700px;
+    margin-top:50px;
+    margin-left:50px;
+    font-family: Arial,Tahoma, Calibri, sans-serif;
+}
+            
+#main p{
+   text-align:center;
+   font-size: 2em;
+   font-weight: bold;
+}
+            
+ 
+.grid-table {
+		margin-bottom: 20px;
+		border-collapse:collapse;
+		font-family: Arial,Tahoma, Calibri, sans-serif;
+        border:1px solid #ccc;
+        box-sizing: border-box;
+
+	}
+
+    .grid-table .doscroll tr:hover {
+         background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+         background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+         background-image: linear-gradient(#E3F7FF,#B7E7FB);
+
+        }
+
+
+
+    .grid-table th:hover {
+        cursor:pointer;
+        cursor:hand;
+
+
+    }
+	.grid-table th {
+		color: #000;
+		padding: 0.7em 1em 0.7em 1.15em;
+		font-size: 1em;
+        text-align: center;
+       border-top:1px solid #E0E1E3;
+        border-left:1px solid #E0E1E3;
+        border-bottom:1px solid #E0E1E3;
+        background-image: linear-gradient(#fff,#ddd);
+        overflow:hidden;
+ box-sizing: border-box;
+	}
+            
+   .grid-table th:first-child {
+          border-left:none;
+           box-sizing: border-box;
+    }
+    .grid-table td {
+		color: #000;
+		padding: 0.7em 1em 0.7em 1.15em;
+		/*text-shadow: 0 0 1px rgba(255,255,255,0.1);*/
+		font-size: 1em;
+        text-align: center;
+        border-right:1px solid #E3E4E6; 
+       border-left: :1px solid #E3E4E6;
+        overflow:hidden;
+        box-sizing: border-box;
+        border-bottom:1px solid #E0E1E3;
+
+	}
+            
+    .grid-table th:hover {
+         background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+         background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+         background-image: linear-gradient(#E3F7FF,#B7E7FB);
+    }
+
+	.grid-table-1 {
+		background: #fff;
+	}
+
+            
+
+	.grid-table-1 tr:hover {
+		background: rgba(0,0,0,0.19);
+	}
+          
+
+/* scroll bars by Kushagra Agarwal*/
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 17px;
+	background-color: #E3F7FF;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #B7E7FB;
+}
+

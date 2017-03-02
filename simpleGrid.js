@@ -20,6 +20,15 @@ function SimpleGrid(zoneId, tableId, tableClass) {
      this.html5ImputDateSupport = (test.type !== "text");
        //this.html5ImputDateSupport=false;
     
+    this.Save=function(){
+     if(this.config.save)
+            this.config.save();
+    }
+    
+    this.getData=function(){
+       return JSON.stringify(this.data);
+    }
+    
     this.CreateInput=function(aType,aName,aValue){
         var doc = this.doc;
         var html_type,html_value;
@@ -29,7 +38,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         html_value = aValue;
         html_type = 'text';
         
-        if(aType==='mm-dd-yyyy' &  this.html5ImputDateSupport){ // English date
+      
+          if(aType==='mm-dd-yyyy' &  this.html5ImputDateSupport){ // English date
             //            aaaa-mm-jj
             html_value = aValue.substring(6,10)+"-"+aValue.substring(0,2)+"-"+aValue.substring(3,5)
             html_type = 'date';
@@ -38,6 +48,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
              html_value = aValue.substring(6,10)+"-"+aValue.substring(3,5)+"-"+aValue.substring(0,2)
             html_type = 'date';
     
+        }
+        else if(aType==='dd/mm/yyyy' &  this.html5ImputDateSupport){ // French date
+            html_value = aValue.substring(6,10)+"/"+aValue.substring(3,5)+"/"+aValue.substring(0,2)
+            html_type = 'date';
+    
+        }
+        else if(aType==='mm/dd/yyyy' &  this.html5ImputDateSupport){ // English date
+            //            aaaa-mm-jj
+            html_value = aValue.substring(6,10)+"/"+aValue.substring(0,2)+"/"+aValue.substring(3,5)
+            html_type = 'date';
         }
         att.value =html_type;  
         elem.setAttributeNode(att);
@@ -222,12 +242,15 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                                 if(aType==='mm-dd-yyyy' &  self.html5ImputDateSupport){ // English date
                                     //            aaaa-mm-jj
                                     val= val.substring(5,7)+"-"+val.substring(8,10)+"-"+val.substring(0,4)
-       
                                 }
                                 else if(aType==='dd-mm-yyyy' &  self.html5ImputDateSupport){ // French date
                                     val= val.substring(8,10)+"-"+val.substring(5,7)+"-"+val.substring(0,4)
-
-
+                                }
+                                else if(aType==='mm/dd/yyyy' &  self.html5ImputDateSupport){ // French date
+                                    val= val.substring(5,7)+"/"+val.substring(8,10)+"/"+val.substring(0,4)
+                                }
+                                else if(aType==='dd/mm/yyyy' &  self.html5ImputDateSupport){ // French date
+                                    val= val.substring(8,10)+"/"+val.substring(5,7)+"/"+val.substring(0,4)
                                 }
                             }
                    
@@ -313,7 +336,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                  this.data.arr.sort(function(a, b){
                     var elA = a[aKey]+""; // coerce to string
                     var elB = b[aKey]+"";
-                     if(type==='integer'){
+                     if(type==='number'){
                         elA = elA.replace(",",".");
                         elB = elB.replace(",",".");
                         elA = parseInt(elA);  
@@ -321,7 +344,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      }else if(type==='string'){
                         elA = elA.toLowerCase();
                         elB = elB.toLowerCase();  
-                     }else if(type==='dd-mm-yyyy'){ // French date
+                     }else if(type==='dd-mm-yyyy' || type==='dd/mm/yyyy'){ // French date
                         var n1  = 0;
 					    var n2  = 0; 
 		            	n1 = (elA.substring(3,5)*100);
@@ -332,7 +355,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 						n2 +=(elB.substring(6,10)*10000); 
                         elA = n1;
                         elB = n2;
-                     }else if(type==='mm-dd-yyyy'){ // English date
+                     }else if(type==='mm-dd-yyyy' || type==='mm/dd/yyyy'){ // English date
                         var n1  = 0;
 					    var n2  = 0; 
 		            	n1 = (elA.substring(3,5)*1);
@@ -537,6 +560,23 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         elem.onclick = function() {
                 self.showModal('-1');
             }
+        att = doc.createAttribute("style");
+        att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;';
+        elem.setAttributeNode(att);
+        this.zone.appendChild(elem);
+        
+             // Creating the 'Save' Button right of footer
+        
+        elem = doc.createElement("button");
+        att = doc.createAttribute("id"); 
+        att.value = 'simpleGrid_Save'; 
+        elem.setAttributeNode(att);
+        var item = this.translate('Save'); 
+        txt = doc.createTextNode(item); 
+        elem.appendChild(txt);
+        elem.onclick = function(){
+            self.Save();
+        }
         att = doc.createAttribute("style");
         att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;';
         elem.setAttributeNode(att);
