@@ -2,6 +2,8 @@
 
 Here is a simpleGrid system with typed columns, scrollable, sortable, with a modal to enter or modify data.
 
+Work in progress : Not IE compatible !
+
 03/03/2017 : The modal becomes draggable
 
 03/02/2017 : Saving function + more Commenting
