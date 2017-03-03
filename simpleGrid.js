@@ -348,45 +348,54 @@ function SimpleGrid(zoneId, tableId, tableClass) {
              if(obj){
                  self=this;
                  var aKey = this.dataKeys[offset];
-           
-                 this.data.arr.sort(function(a, b){
-                    var elA = a[aKey]+""; // coerce to string
-                    var elB = b[aKey]+"";
+                 self.data.arr.sort(function(a, b){
+                    var boo_Sort_Integer = false;
+                    var intA,intB = 0;
+                    var elA,elB = '';
+                    var elA = (a[aKey]+'') || ''; // If something mistyped in json
+                    var elB = (b[aKey]+'') || ''; // Coercing to string for the numbers
                      if(type==='number'){
-                        elA = elA.replace(",",".");
+                        boo_Sort_Integer = true;
+                        elA = elA.replace(",","."); // in case is a french float with decimal separator as ','
                         elB = elB.replace(",",".");
-                        elA = parseInt(elA);  
-                        elB = parseInt(elB);  
+                        intA = parseInt(elA);  
+                        intB = parseInt(elB);  
                      }else if(type==='string'){
                         elA = elA.toLowerCase();
                         elB = elB.toLowerCase();  
                      }else if(type==='dd-mm-yyyy' || type==='dd/mm/yyyy'){ // French date
-                        var n1  = 0;
-					    var n2  = 0; 
-		            	n1 = (elA.substring(3,5)*100);
-						n1 +=(elA.substring(0,2)*1);
-						n1 +=(elA.substring(6,10)*10000); 
-		            	n2 = (elB.substring(3,5)*100);
-						n2 +=(elB.substring(0,2)*1);
-						n2 +=(elB.substring(6,10)*10000); 
-                        elA = n1;
-                        elB = n2;
+                        boo_Sort_Integer = true;
+		            	intA = parseInt(elA.substring(3,5))*100;
+						intA +=parseInt(elA.substring(0,2));
+						intA +=parseInt(elA.substring(6,10))*10000; 
+		            	intB = parseInt(elB.substring(3,5))*100;
+						intB +=parseInt(elB.substring(0,2));
+						intB +=parseInt(elB.substring(6,10))*10000; 
                      }else if(type==='mm-dd-yyyy' || type==='mm/dd/yyyy'){ // English date
-                        var n1  = 0;
-					    var n2  = 0; 
-		            	n1 = (elA.substring(3,5)*1);
-						n1 +=(elA.substring(0,2)*100);
-						n1 +=(elA.substring(6,10)*10000); 
-		            	n2 = (elB.substring(3,5)*1);
-						n2 +=(elB.substring(0,2)*100);
-						n2 +=(elB.substring(6,10)*10000); 
-                        elA = n1;
-                        elB = n2;
+                         // ex : 12/01/2016 => 20160000 + 1200 + 1 = 20161201
+                        boo_Sort_Integer = true;
+		            	intA = parseInt(elA.substring(3,5));//Day
+						intA +=parseInt(elA.substring(0,2))*100;//Month
+						intA +=parseInt(elA.substring(6,10))*10000; //Yea r
+		            	intB = parseInt(elB.substring(3,5));
+						intB +=parseInt(elB.substring(0,2))*100;
+						intB +=parseInt(elB.substring(6,10))*10000; 
                      }
-                    if(elA <elB){
-                        if(sortWay==='up') {return -1;} else {return 1;}
-                    }else if(elA > elB){
-                        if(sortWay==='up')  {return 1;} else {return -1;}
+                    if(boo_Sort_Integer){ 
+                        if(intA <intB){
+                            if(sortWay==='up') {return -1;} else {return 1;}
+                        }else if(intA > intB){
+                            if(sortWay==='up')  {return 1;} else {return -1;}
+                        }
+                         else return 0;                    
+                    }
+                     else{
+                        if(elA <elB){
+                            if(sortWay==='up') {return -1;} else {return 1;}
+                        }else if(elA > elB){
+                            if(sortWay==='up')  {return 1;} else {return -1;}
+                        }
+                         else return 0;
                     }
                   return 0;
                  });
@@ -394,7 +403,6 @@ function SimpleGrid(zoneId, tableId, tableClass) {
              }
          }
          this.Draw();
-         //console.log(colId);
     }
     
     this.Draw=function(objSearch){
