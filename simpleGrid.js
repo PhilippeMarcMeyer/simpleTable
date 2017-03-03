@@ -321,8 +321,10 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem.onclick = function() {
                     var lineOffset = self.offset;
                     self.data.arr.splice(lineOffset,1);
-
+                    self.selectedRow="";
                     self.config.modal.style.display = "none";
+                    self.Draw();
+
                 }
                 aDiv.appendChild(elem);
 
