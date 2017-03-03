@@ -136,7 +136,11 @@
          background-image: linear-gradient(#E3F7FF,#B7E7FB);
 
         }
-
+.selectedRow {
+           background-image: -moz-linear-gradient(#E3F7FF,#B7E7FB);
+         background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
+         background-image: linear-gradient(#E3F7FF,#B7E7FB);  
+}
 
 
     .grid-table th:hover {
@@ -181,6 +185,7 @@
          background-image: -webkit-gradient(linear,#E3F7FF,#B7E7FB);
          background-image: linear-gradient(#E3F7FF,#B7E7FB);
     }
+    
 
 	.grid-table-1 {
 		background: #fff;

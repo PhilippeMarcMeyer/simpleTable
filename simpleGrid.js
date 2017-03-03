@@ -15,6 +15,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.html5ImputDateSupport=false;
     this.allowSearch=false;
     this.dragObj=null;
+    this.selectedRow;
     
      var test = document.createElement("input");
      test.setAttribute("type", "date");
@@ -175,9 +176,26 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             aDiv.setAttributeNode(att); 
             
             // Bind the functions...
-            aDiv.onmousedown = function () {
-                _drag_init(this);
-                return false;
+            aDiv.onmousedown = function (e) {
+                var doDrag = false;
+                var elem = (e.target || e.srcElement);
+                if(!elem) doDrag = true;
+                if(!doDrag){
+                    var type=elem.tagName;
+                     if(!type) doDrag = true;
+                }
+                if(!doDrag){
+                    type=type.toLowerCase();
+                    if(type!=='input' && type!=='button')
+                        doDrag = true;
+                }
+                if(doDrag){
+                    _drag_init(this);
+                    return false;  
+                }else{
+                    return true;
+                }
+
             };
         
             // Cross to close modal
@@ -288,6 +306,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem.appendChild(txt);
                 elem.onclick = function() {
                     self.config.modal.style.display = "none";
+                    self.Draw();
                 }
                 aDiv.appendChild(elem);
             
@@ -304,7 +323,6 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                     self.data.arr.splice(lineOffset,1);
 
                     self.config.modal.style.display = "none";
-                    self.Draw();
                 }
                 aDiv.appendChild(elem);
 
@@ -322,8 +340,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 
 
             close_sg_modal.onclick = function() {
-                
                 self.config.modal.style.display = "none";
+                self.Draw();
             }
 
             ptr.style.display = "block";
@@ -337,6 +355,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         var sortWay='up';
         var offset;
         var self = this;
+        this.selectedRow='';
          for(var i=0;i<this.header.arr.length;i++){
             if(this.header.arr[i].id===colId){
                 obj=this.header.arr[i];
@@ -469,28 +488,29 @@ function SimpleGrid(zoneId, tableId, tableClass) {
              att = document.createAttribute("class"); 
              att.value = "doscroll";  
              atbody.setAttributeNode(att); 
-                    att = document.createAttribute("style"); 
-                    att.value="overflow-y: scroll;";
+             att = document.createAttribute("style"); 
+             att.value="overflow-y: scroll;";
 
-                    if(this.config.height){
-                        var anHeight = parseInt(this.config.height);
-                        anHeight = anHeight - 24;
-                        att.value = att.value+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
-                        atbody.setAttributeNode(att); 
+            if(this.config.height){
+                var anHeight = parseInt(this.config.height);
+                anHeight = anHeight - 24;
+                att.value = att.value+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
+                atbody.setAttributeNode(att); 
+            }
+
+            if(this.config.booModal){
+
+                atbody.addEventListener("click",function(e){
+                    var target = (e.target) ? e.target : e.srcElement;
+                    var parent = target.parentNode;
+                    if (parent){
+                        self.showModal(parent.id)
+                        self.selectedRow=parent.id;
                     }
-    
-                    if(this.config.booModal){
-                     
-                        atbody.addEventListener("click",function(e){
-                            var target = (e.target) ? e.target : e.srcElement;
-                            var parent = target.parentNode;
-                            if (parent){
-                                self.showModal(parent.id)
-                            }
-          
-                        }); // Adding an Event listener   
-                  
-                    }
+
+                }); // Adding an Event listener   
+
+            }
 
 
         var nrLines=0;   
@@ -519,6 +539,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             att = document.createAttribute("id");
             att.value = this.tableId+"_"+"row"+i;
             aLine.setAttributeNode(att); 
+                
+            if(this.selectedRow===att.value){
+                att = document.createAttribute("class");
+                att.value = 'selectedRow';
+                aLine.setAttributeNode(att);                
+                
+            }
             // Looping thru properties of each data object
             var j =0;
 			Object.keys(lineObj).forEach(function(key) {
@@ -688,3 +715,13 @@ function getMouseX() {
 function getMouseY() {
     return y;
 }
+
+function getFocus(){
+var focused = document.activeElement;
+if (!focused || focused == document.body)
+    focused = null;
+else if (document.querySelector)
+    focused = document.querySelector(":focus");
+return focused;
+}
+
