@@ -16,32 +16,46 @@
 
 /* Modal Content */
 .modal-content {
+         cursor:pointer;
+        cursor:hand;
     position:relative;
-    background-color: #fefefe;
+    z-index: 9;
+    background-color: #ccc;
+    background-image: linear-gradient(#fff,#777);
     font-size: 12px;
     margin: auto;
     padding-left: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     padding-right: 10px;
     border: 3px solid #777;
     width: 500px;
     border-radius:6px;
 }
-    
+
+.modal-content:before {
+    content: "";
+    position: absolute;/*set 'child' to be absolute*/
+    z-index: -1; /*Make this lower so text appears in front*/    
+    /*You can choose to align it left, right, top or bottom here*/
+    top: 40px; 
+    right:0;
+    bottom: 0;
+    left: 0;
+    background: #fefefe;
+}
 
 .modal-content label{
- position:relative;
- width: 100px;
- margin-left:20px;
-  padding-bottom: 15px;   
+     position:relative;
+     width: 100px;
+     margin-left:20px;
+     padding-bottom: 15px;   
     }
     
 .modal-content input[type='text'],.modal-content input[type='date']{
- position:absolute;
- width: 140px;
- left: 125px;
- margin-bottom: 15px;   
-
+     position:absolute;
+     width: 140px;
+     left: 125px;
+     margin-bottom: 15px;   
     }
     
 .modal-content button{

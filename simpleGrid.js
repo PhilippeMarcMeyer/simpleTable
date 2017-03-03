@@ -14,6 +14,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.offset=0;
     this.html5ImputDateSupport=false;
     this.allowSearch=false;
+    this.dragObj=null;
     
      var test = document.createElement("input");
      test.setAttribute("type", "date");
@@ -41,22 +42,22 @@ function SimpleGrid(zoneId, tableId, tableClass) {
       
           if(aType==='mm-dd-yyyy' &  this.html5ImputDateSupport){ // English date
             //            aaaa-mm-jj
-            html_value = aValue.substring(6,10)+"-"+aValue.substring(0,2)+"-"+aValue.substring(3,5)
+            html_value = aValue.substring(6,10)+"-"+aValue.substring(0,2)+"-"+aValue.substring(3,5);
             html_type = 'date';
         }
         else if(aType==='dd-mm-yyyy' &  this.html5ImputDateSupport){ // French date
-             html_value = aValue.substring(6,10)+"-"+aValue.substring(3,5)+"-"+aValue.substring(0,2)
-            html_type = 'date';
+             html_value = aValue.substring(6,10)+"-"+aValue.substring(3,5)+"-"+aValue.substring(0,2);
+             html_type = 'date';
     
         }
         else if(aType==='dd/mm/yyyy' &  this.html5ImputDateSupport){ // French date
-            html_value = aValue.substring(6,10)+"/"+aValue.substring(3,5)+"/"+aValue.substring(0,2)
+            html_value = aValue.substring(6,10)+"/"+aValue.substring(3,5)+"/"+aValue.substring(0,2);
             html_type = 'date';
     
         }
         else if(aType==='mm/dd/yyyy' &  this.html5ImputDateSupport){ // English date
             //            aaaa-mm-jj
-            html_value = aValue.substring(6,10)+"/"+aValue.substring(0,2)+"/"+aValue.substring(3,5)
+            html_value = aValue.substring(6,10)+"/"+aValue.substring(0,2)+"/"+aValue.substring(3,5);
             html_type = 'date';
         }
         att.value =html_type;  
@@ -88,7 +89,9 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         }
         return itemTranslated;
     }
+    
 
+   
     this.SetConfig=function(json_str){
 		this.config = JSON.parse(json_str);
         // If a modal is wished on row click then add information to the SimpleGrid object
@@ -100,9 +103,12 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             if(modalId.length!==0){
                modalPtr=this.doc.getElementById(modalId);
                if(modalPtr){
+                   self=this;
                    this.config.booModal=true; 
                    this.config.modal=modalPtr;
                    this.config.modalTitle='Modifiying';
+
+
                    booModal=true;
                }           
             } 
@@ -162,7 +168,18 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             var aDiv = doc.createElement("div");
             var att = doc.createAttribute("class"); 
             att.value = "modal-content";  
-            aDiv.setAttributeNode(att);  
+            aDiv.setAttributeNode(att); 
+            
+            att = doc.createAttribute("draggable"); 
+            att.value = "true";  
+            aDiv.setAttributeNode(att); 
+            
+            // Bind the functions...
+            aDiv.onmousedown = function () {
+                _drag_init(this);
+                return false;
+            };
+        
             // Cross to close modal
             var spanClose = doc.createElement("span");
             att = doc.createAttribute("class"); 
@@ -189,7 +206,6 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 txt = doc.createTextNode(this.header.arr[i].title); 
                 elem.appendChild(txt);
                 aDiv.appendChild(elem); 
-                
              
                // if(this.html5ImputDateSupport)
                     
@@ -606,4 +622,61 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         
     }
     
+}
+
+// by https://jsfiddle.net/user/tovic/fiddles/ ++ Other contributions + personal adaptations
+var selected = null, // Object of the element to be moved
+    x_pos = 0, y_pos = 0, // Stores x & y coordinates of the mouse pointer
+    x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element
+
+// Will be called when user starts dragging an element
+function _drag_init(elem) {
+    // Store the object of the element which needs to be moved
+    selected = elem;
+    x_pos = getMouseX();
+    y_pos = getMouseY();
+    x_elem = x_pos - selected.offsetLeft;
+    y_elem = y_pos - selected.offsetTop;
+
+}
+
+// Will be called when user dragging an element
+function _move_elem(e) {
+    x_pos = getMouseX();
+    y_pos = getMouseY();
+    if (selected !== null) {
+        selected.style.position='absolute'; // Only now !
+        selected.style.left = (x_pos - x_elem) + 'px';
+        selected.style.top = (y_pos - y_elem) + 'px';
+    }
+}
+
+// Destroy the object when we are done
+function _destroy() {
+    selected = null;
+}
+
+
+
+document.onmousemove = _move_elem;
+document.onmouseup = _destroy;
+
+//http://stackoverflow.com/users/1033808/paul-hiemstra
+
+var x = 0;
+var y = 0;
+
+document.addEventListener('mousemove', onMouseMove, false)
+
+function onMouseMove(e){
+    x = e.clientX;
+    y = e.clientY;
+}
+
+function getMouseX() {
+    return x;
+}
+
+function getMouseY() {
+    return y;
 }
