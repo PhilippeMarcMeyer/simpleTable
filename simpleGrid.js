@@ -1,5 +1,5 @@
 function SimpleGrid(zoneId, tableId, tableClass) {
-    "use strict";
+    //"use strict";
 	this.doc = document;
     this.zoneId = zoneId;
 	this.zone = this.doc.getElementById(this.zoneId);
@@ -35,7 +35,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         var doc = this.doc;
         var html_type,html_value;
         var elem = doc.createElement("input");
-        var att = doc.createAttribute("type"); 
+        
         
         html_value = aValue;
         html_type = 'text';
@@ -61,20 +61,15 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             html_value = aValue.substring(6,10)+"/"+aValue.substring(0,2)+"/"+aValue.substring(3,5);
             html_type = 'date';
         }
-        att.value =html_type;  
-        elem.setAttributeNode(att);
+		
+
+        elem.setAttribute('type',html_type);
         
-        att = doc.createAttribute("name"); 
-        att.value = aName; 
-        elem.setAttributeNode(att);
+        elem.setAttribute('name',aName);
+                 
+        elem.setAttribute('id',aName);
                 
-        att = doc.createAttribute("id"); 
-        att.value = aName; 
-        elem.setAttributeNode(att);
-                
-        att = doc.createAttribute("value"); 
-         att.value = html_value;
-        elem.setAttributeNode(att);
+        elem.setAttribute('value',html_value);
                 
         return elem;
     }
@@ -96,7 +91,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.SetConfig=function(json_str){
 		this.config = JSON.parse(json_str);
         // If a modal is wished on row click then add information to the SimpleGrid object
-    
+         var self;
          var booModal = false;
          var modalPtr;
          if(this.config.modal){
@@ -167,15 +162,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         if(ptr){
            ptr.innerHTML = ""; 
             var aDiv = doc.createElement("div");
-            var att = doc.createAttribute("class"); 
-            att.value = "modal-content";  
-            aDiv.setAttributeNode(att); 
-            
-            att = doc.createAttribute("draggable"); 
-            att.value = "true";  
-            aDiv.setAttributeNode(att); 
-            
-            // Bind the functions...
+   
+            aDiv.setAttribute('class','modal-content'); 
+			
+            aDiv.setAttribute('draggable','true'); 
+
+    
+            // Drag only if we are not targeting a button or a filed in the modal
             aDiv.onmousedown = function (e) {
                 var doDrag = false;
                 var elem = (e.target || e.srcElement);
@@ -193,6 +186,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                     _drag_init(this);
                     return false;  
                 }else{
+					if(type==='input') elem.setSelectionRange(0, elem.value.length);
                     return true;
                 }
 
@@ -200,18 +194,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         
             // Cross to close modal
             var spanClose = doc.createElement("span");
-            att = doc.createAttribute("class"); 
-            att.value = "close";  
-            spanClose.setAttributeNode(att); 
-            
-            att = doc.createAttribute("id"); 
-            att.value = "close_sg_modal";  
-            spanClose.setAttributeNode(att); 
+         
+            spanClose.setAttribute('class','close'); 
+			
+            spanClose.setAttribute('id','close_sg_modal'); 
             
             // Adding cross character
             var txt = doc.createTextNode('X'); 
             spanClose.appendChild(txt); 
             aDiv.appendChild(spanClose); 
+			
             var aH3 = doc.createElement("h3");
             txt = doc.createTextNode(modalTitle); 
             aH3.appendChild(txt);
@@ -224,11 +216,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 txt = doc.createTextNode(this.header.arr[i].title); 
                 elem.appendChild(txt);
                 aDiv.appendChild(elem); 
-             
-               // if(this.html5ImputDateSupport)
-                    
-                      // obj=this.header.arr[i];
-               // type=obj.type;
+            
            
               if (lineOffset!=-1)
                    aValue = this.data.arr[lineOffset][this.header.arr[i].name]; 
@@ -246,18 +234,19 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);
                 
- 
+
                 
             }
             
                             
                 elem = doc.createElement("button");
-                att = doc.createAttribute("id"); 
-                att.value = 'validate'; 
-                elem.setAttributeNode(att);
+				
+                elem.setAttribute('id','validate');
+				
                 item=this.translate('Validate');
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
+				
                 elem.onclick = function() {
                 var ptr,lineOffset,nrCols;
                 lineOffset = self.offset;
@@ -298,23 +287,23 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 aDiv.appendChild(elem);
             
                 elem = doc.createElement("button");
-                att = doc.createAttribute("id"); 
-                att.value = 'cancel'; 
-                elem.setAttributeNode(att);
+
+                elem.setAttribute('id','cancel');
+				
                 item = this.translate('Cancel'); 
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
+				
                 elem.onclick = function() {
                     self.config.modal.style.display = "none";
                     self.Draw();
                 }
+				
                 aDiv.appendChild(elem);
             
                 elem = doc.createElement("button");
-                att = doc.createAttribute("id"); 
-            
-                att.value = 'delete'; 
-                elem.setAttributeNode(att);
+				
+                elem.setAttribute('id','delete');
                 item = this.translate('Delete'); 
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
@@ -328,8 +317,6 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 }
                 aDiv.appendChild(elem);
 
-
-            
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);
                 elem = doc.createElement("br");
@@ -435,27 +422,21 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             searchForLower = searchFor.toLowerCase();
 
         }
-            var item;
+			var athead,aHead,att,elem,item,txt,aLine,lineObj,lineObjLen;
+
 			this.zone.innerHTML = "";
 			var doc = this.doc; // For speed 
             var aTable = doc.createElement("table");
-            var att = document.createAttribute("class");  
-            var athead,aHead,att,elem,txt;
-            att.value = this.tableClass;                
-            aTable.setAttributeNode(att); 
-			var elem,txt,aHead,aLine,lineObj,lineObjLen;
+            aTable.setAttribute('class',this.tableClass); 
 			// ------------- Building Header -------------------------
     
              athead = doc.createElement("div");
-             att = document.createAttribute("class"); 
-             att.value = "stayFixed";  
-             athead.setAttributeNode(att); 
+  
+             athead.setAttribute('class','stayFixed'); 
                if(this.config.width){
-                    att = document.createAttribute("style"); 
                     var aWidth = parseInt(this.config.width);
                     aWidth = aWidth - 20;
-                    att.value = "width:"+aWidth+"px;width:"+aWidth+"px;overflow-y: hidden;";
-                    athead.setAttributeNode(att); 
+                    athead.setAttribute('style','width:'+aWidth+'px;width:'+aWidth+'px;overflow-y: hidden;'); 
              }
         
 			aHead = doc.createElement("tr");
@@ -464,16 +445,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 			for(var i=0;i<nrCols;i++){
 				elem = doc.createElement("th");
                 // Adding an id to each column header
-                att = document.createAttribute("id");
-                att.value = this.tableId+"_"+"col"+i;
-                elem.setAttributeNode(att); 
+
+                elem.setAttribute('id',this.tableId+"_"+"col"+i); 
                 
                 if(this.header.arr[i].width){
-                    att = document.createAttribute("style");
                     aWidth = parseInt(this.header.arr[i].width);
                     aWidth = aWidth-(24/nrCols);
-                    att.value ="width:"+aWidth+"px;"; 
-                    elem.setAttributeNode(att); 
+                    elem.setAttribute('style','width:'+aWidth+'px;'); 
                 }
                 // Adding the title of each column header
 				txt = doc.createTextNode(this.header.arr[i].title); 
@@ -486,19 +464,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
      var self = this;
 			// ------------- Building Body -----------------------------
         
-        var atbody = doc.createElement("div");
-             att = document.createAttribute("class"); 
-             att.value = "doscroll";  
-             atbody.setAttributeNode(att); 
-             att = document.createAttribute("style"); 
-             att.value="overflow-y: scroll;";
+        var atbody = doc.createElement('div');
+            atbody.setAttribute('class','doscroll'); 
+         var aStyle = "overflow-y: scroll;";
 
             if(this.config.height){
                 var anHeight = parseInt(this.config.height);
                 anHeight = anHeight - 24;
-                att.value = att.value+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
-                atbody.setAttributeNode(att); 
+                aStyle = aStyle+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
             }
+             atbody.setAttribute('style',aStyle); 
 
             if(this.config.booModal){
 
@@ -538,15 +513,12 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             if(boo_show){
 			aLine= doc.createElement("tr");
             // adding an id to tr for modals
-            att = document.createAttribute("id");
-            att.value = this.tableId+"_"+"row"+i;
-            aLine.setAttributeNode(att); 
+			var anId = this.tableId+"_"+"row"+i;
+            aLine.setAttribute('id',anId); 
                 
-            if(this.selectedRow===att.value){
-                att = document.createAttribute("class");
-                att.value = 'selectedRow';
-                aLine.setAttributeNode(att);                
-                
+			// We want the selected row to appear 'selected' (class .selectedRow)
+            if(this.selectedRow===anId){
+                aLine.setAttribute('class','selectedRow');                
             }
             // Looping thru properties of each data object
             var j =0;
@@ -555,12 +527,12 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      self.dataKeys.push(key);
                 }
 				elem = doc.createElement("td");
-				txt = doc.createTextNode(lineObj[key]); 
+				txt = doc.createTextNode(lineObj[key]); // Set the td content to the corresponding item in the data array
 				elem.appendChild(txt);
-                if(self.header.arr[j].width){
-                    att = document.createAttribute("style");
-                    att.value ="width:"+self.header.arr[j].width+";"; 
-                    elem.setAttributeNode(att); 
+				
+                if(self.header.arr[j].width){ // If we were given a width
+                    aStyle ="width:"+self.header.arr[j].width+";"; 
+                    elem.setAttribute('style',aStyle); 
                 }
 				aLine.appendChild(elem);
                 j++;
@@ -586,14 +558,12 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             item = this.translate('Search'); 
             txt = doc.createTextNode(' '+item+' : '); 
             elem.appendChild(txt);
-            att = doc.createAttribute("style");
-            att.value = 'margin-left:20px;font-style:italic;';
-            elem.setAttributeNode(att);
+			
+            elem.setAttribute('style','margin-left:20px;font-style:italic;');
+			
             this.zone.appendChild(elem);
             elem = this.CreateInput('string','sg_search',searchFor);
-            att = doc.createAttribute("style");
-            att.value = 'margin-left:5px;width:200px;margin-top:-10px;border-radius:4px;border : 1px solid #777;';
-            elem.setAttributeNode(att);
+            elem.setAttribute('style','margin-left:5px;width:200px;margin-top:-10px;border-radius:4px;border : 1px solid #777;');
             
             elem.onkeyup = function() {
                 self.Draw(this); // this will be the this of the input text
@@ -604,35 +574,30 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         // Creating the 'New' Button right of footer
         
         elem = doc.createElement("button");
-        att = doc.createAttribute("id"); 
-        att.value = 'simpleGrid_add'; 
-        elem.setAttributeNode(att);
+        elem.setAttribute('id','simpleGrid_add');
+		
         var item = this.translate('New'); 
         txt = doc.createTextNode(item); 
         elem.appendChild(txt);
         elem.onclick = function() {
                 self.showModal('-1');
             }
-        att = doc.createAttribute("style");
-        att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;';
-        elem.setAttributeNode(att);
+        elem.setAttribute('style','font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;');
         this.zone.appendChild(elem);
         
              // Creating the 'Save' Button right of footer
         
         elem = doc.createElement("button");
-        att = doc.createAttribute("id"); 
-        att.value = 'simpleGrid_Save'; 
-        elem.setAttributeNode(att);
+
+        elem.setAttribute('id','simpleGrid_Save');
+		
         var item = this.translate('Save'); 
         txt = doc.createTextNode(item); 
         elem.appendChild(txt);
         elem.onclick = function(){
             self.Save();
         }
-        att = doc.createAttribute("style");
-        att.value = 'font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;';
-        elem.setAttributeNode(att);
+        elem.setAttribute('style','font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;');
         this.zone.appendChild(elem);
         
        var ptr = this.doc.getElementById('sg_search');
