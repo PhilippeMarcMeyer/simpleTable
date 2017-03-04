@@ -2,7 +2,9 @@
 
 Here is a simpleGrid system with typed columns, scrollable, sortable, with a modal to enter or modify data.
 
-Work in progress : Not IE compatible !
+Work in progress !
+
+04/03/2017 : Changed setAttributeNode to setAttribute to ensure IE 11 compatibility dropped "use strict" for the moment because of IE11
 
 03/03/2017 : The modal becomes draggable
 
