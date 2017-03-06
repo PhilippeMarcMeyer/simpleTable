@@ -22,17 +22,19 @@
         <div id="zone"></div> <!-- The Grid zone-->
     </div>
 <script>
+    
+
    // Settings like width and height, le id of the modal zone.  allowSearch gives you a search field
  var aConfig ='{"width":"700px","height":"316px","modal":"myModal","allowSearch":"yes"}';
     
     // Defining the header of the grid : colums names (matching data), types , titles and width
     // Supported types are : number, string and  mm-dd-yyyy, mm/dd/yyyy, dd-mm-yyyy, dd/mm/yyyy
- var aHeader = '{"arr":[{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"}]}';
+ var aHeader = '{"arr":[{"name":"id","type":"protected","title":"id","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px"}]}';
 
     // This json string should be provides by the back-end : here for demonstration purpose
     // It's an objet containing an array 'arr' of objects representing the rows of our grid
     // You provide for each cell, the name (which must match the name in the header) and the value
-var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":"12-30-1950","langage":"C++"},{"firstname":"Denis","lastname":"Ritchie","birthdate":"09-09-1941","langage":"C"},{"firstname":"Kenneth","lastname":"Thompson","birthdate":"02-04-1943","langage":"Go"},{"firstname":"James","lastname":"Gosling","birthdate":"05-19-1955","langage":"Java"},{"firstname":"Brendan ","lastname":"Eich","birthdate":"07-04-1961","langage":"Javascript"},{"firstname":"Guido","lastname":"Van Rossum","birthdate":"01-31-1956","langage":"Python"},{"firstname":"Yukihiro","lastname":"Matsumoto","birthdate":"04-14-1965","langage":"Ruby"},{"firstname":"Roberto","lastname":"Lerusalimschy","birthdate":"05-21-1960","langage":"Lua"},{"firstname":"Rasmus","lastname":"Lerdorf","birthdate":"11-22-1968","langage":"Php"},{"firstname":"Jean","lastname":"Ichbiah","birthdate":"03-25-1940","langage":"Ada"}]}';
+var aData = '{"arr": [{"id": "1","firstname": "Bjarne ","lastname": "Stroustrup","birthdate": "12-30-1950","langage": "C++", "note":""}, {"id": "2","firstname": "Denis","lastname": "Ritchie","birthdate": "09-09-1941","langage": "C", "note":""}, {"id": "3","firstname": "Kenneth","lastname": "Thompson","birthdate": "02-04-1943","langage": "Go", "note":""}, {"id": "4","firstname": "James","lastname": "Gosling","birthdate": "05-19-1955","langage": "Java", "note":""}, {"id": "5","firstname": "Brendan ","lastname": "Eich","birthdate": "07-04-1961","langage": "Javascript", "note":"my fav"}, {"id": "6","firstname": "Guido","lastname": "Van Rossum","birthdate": "01-31-1956","langage": "Python"}, {"id": "7","firstname": "Yukihiro","lastname": "Matsumoto","birthdate": "04-14-1965","langage": "Ruby", "note":"my fav"}, {"id": "8","firstname": "Roberto","lastname": "Lerusalimschy","birthdate": "05-21-1960","langage": "Lua", "note":""}, {"id": "9","firstname": "Rasmus","lastname": "Lerdorf","birthdate": "11-22-1968","langage": "Php", "note":""}, {"id": "10","firstname": "Jean","lastname": "Ichbiah","birthdate": "03-25-1940","langage": "Ada", "note":""}]}';
     
     // Optional feature (you don't need to set it via SetTranslations)
     // By default a button New title is 'New', you change it to localize or just to provide another title like "Add" 

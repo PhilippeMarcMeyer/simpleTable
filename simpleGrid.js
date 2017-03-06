@@ -33,13 +33,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     
     this.CreateInput=function(aType,aName,aValue){
         var doc = this.doc;
-        var html_type,html_value;
+        var html_type,html_value,html_readOnly;
         var elem = doc.createElement("input");
         
         
         html_value = aValue;
         html_type = 'text';
-        
+        html_readOnly='';
       
           if(aType==='mm-dd-yyyy' &  this.html5ImputDateSupport){ // English date
             //            aaaa-mm-jj
@@ -61,6 +61,10 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             html_value = aValue.substring(6,10)+"/"+aValue.substring(0,2)+"/"+aValue.substring(3,5);
             html_type = 'date';
         }
+        else if(aType==='protected'){ // English date
+            //            aaaa-mm-jj
+            html_readOnly = 'readonly';
+        }
 		
 
         elem.setAttribute('type',html_type);
@@ -70,6 +74,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         elem.setAttribute('id',aName);
                 
         elem.setAttribute('value',html_value);
+        
+        if(html_readOnly==='readonly'){
+            
+           elem.setAttribute('readonly',html_readOnly);
+        
+
+        }
                 
         return elem;
     }
@@ -103,8 +114,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                    this.config.booModal=true; 
                    this.config.modal=modalPtr;
                    this.config.modalTitle='Modifiying';
-
-
+                   this.config.modalLeft='';
+                   this.config.modalTop='';
                    booModal=true;
                }           
             } 
@@ -164,7 +175,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             var aDiv = doc.createElement("div");
    
             aDiv.setAttribute('class','modal-content'); 
-			
+			aDiv.setAttribute('id','modalRect'); 
             aDiv.setAttribute('draggable','true'); 
 
     
@@ -209,14 +220,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             aH3.appendChild(txt);
             aDiv.appendChild(aH3); 
             
-            var elem,aValue,aName,aType;
+            var elem,aValue,aName,aType,aTitle;
             var nrCols = this.header.arr.length;
 			for(var i=0;i<nrCols;i++){
-                elem = doc.createElement("label");
-                txt = doc.createTextNode(this.header.arr[i].title); 
-                elem.appendChild(txt);
-                aDiv.appendChild(elem); 
-            
+                aTitle = this.header.arr[i].title;
+                if(aTitle!==''){
+                    elem = doc.createElement("label");
+                    txt = doc.createTextNode(aTitle); 
+                    elem.appendChild(txt);
+                    aDiv.appendChild(elem); 
+                }
            
               if (lineOffset!=-1)
                    aValue = this.data.arr[lineOffset][this.header.arr[i].name]; 
@@ -282,6 +295,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      }
                 
                 self.config.modal.style.display = "none";
+                self.saveModalCoordinates();
                 self.Draw();
                 }
                 aDiv.appendChild(elem);
@@ -295,6 +309,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem.appendChild(txt);
 				
                 elem.onclick = function() {
+					self.saveModalCoordinates();
                     self.config.modal.style.display = "none";
                     self.Draw();
                 }
@@ -311,6 +326,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                     var lineOffset = self.offset;
                     self.data.arr.splice(lineOffset,1);
                     self.selectedRow="";
+				    self.saveModalCoordinates();
                     self.config.modal.style.display = "none";
                     self.Draw();
 
@@ -329,14 +345,34 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 
 
             close_sg_modal.onclick = function() {
+				self.saveModalCoordinates();
                 self.config.modal.style.display = "none";
                 self.Draw();
             }
 
-            ptr.style.display = "block";
+               if(self.config.modalLeft!==''){
+				   	var ptr= document.getElementById('modalRect');
+					if(ptr){
+						ptr.style.position='absolute'; // Only now !
+						ptr.style.left = self.config.modalLeft;
+						ptr.style.top = self.config.modalTop;
+					}
+
+               }
+                self.config.modal.style.display = "block";
         }
     }
     
+    this.saveModalCoordinates=function(){
+        if(this.config.booModal===true){
+			var ptr= document.getElementById('modalRect');
+			if(ptr){
+				this.config.modalLeft=ptr.style.left;
+				this.config.modalTop=ptr.style.top;
+			}
+        }
+
+    }
     this.sort=function(colId){
         var item='';
         var obj;
@@ -443,6 +479,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
       
         var nrCols = this.header.arr.length;
 			for(var i=0;i<nrCols;i++){
+                if(this.header.arr[i].width!=='0px'){
 				elem = doc.createElement("th");
                 // Adding an id to each column header
 
@@ -458,6 +495,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 				elem.appendChild(txt); 
                 // adding the column header to the header
 				aHead.appendChild(elem);
+                }
 			}
               athead.appendChild(aHead); 
             aTable.appendChild(athead); // adding the header (tr) to the table
@@ -526,15 +564,18 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 if(i===0){
                      self.dataKeys.push(key);
                 }
-				elem = doc.createElement("td");
-				txt = doc.createTextNode(lineObj[key]); // Set the td content to the corresponding item in the data array
-				elem.appendChild(txt);
-				
-                if(self.header.arr[j].width){ // If we were given a width
-                    aStyle ="width:"+self.header.arr[j].width+";"; 
-                    elem.setAttribute('style',aStyle); 
-                }
-				aLine.appendChild(elem);
+                  if(self.header.arr[j].width!=='0px'){
+                        elem = doc.createElement("td");
+                        txt = doc.createTextNode(lineObj[key]); // Set the td content to the corresponding item in the data array
+                        elem.appendChild(txt);
+
+                        if(self.header.arr[j].width){ // If we were given a width
+                            aStyle ="width:"+self.header.arr[j].width+";"; 
+                            elem.setAttribute('style',aStyle); 
+                        }
+                        aLine.appendChild(elem);
+                  }
+                
                 j++;
                 
 			});
@@ -613,13 +654,16 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         var anId;
         var self = this;
         for(var i=0;i<this.header.arr.length;i++){
+            
             anId = this.tableId+"_"+"col"+i
+        
             this.header.arr[i].id=anId; // adding an attribute id to each colum header
             this.header.arr[i].ptr=doc.getElementById(anId); // adding an attribute ptr to each colum header
-            this.header.arr[i].ptr.addEventListener("click",function(e){
+            if(this.header.arr[i].ptr){ // Only if my header is real (not 0px)
+             this.header.arr[i].ptr.addEventListener("click",function(e){
                var target = (e.target) ? e.target : e.srcElement;
                self.sort(target.id);
-            }); // Adding an Event listener 
+            });} // Adding an Event listener 
         }
         
     }
@@ -650,6 +694,7 @@ function _move_elem(e) {
         selected.style.position='absolute'; // Only now !
         selected.style.left = (x_pos - x_elem) + 'px';
         selected.style.top = (y_pos - y_elem) + 'px';
+        
     }
 }
 
@@ -691,4 +736,5 @@ else if (document.querySelector)
     focused = document.querySelector(":focus");
 return focused;
 }
+
 
