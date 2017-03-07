@@ -478,16 +478,27 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 			aHead = doc.createElement("tr");
       
         var nrCols = this.header.arr.length;
+		
+		// We need to know the number of visible columns because the width
+		// of each individual column is minored by (24/nrVisibleCols) due to the scroler area
+		var nrVisibleCols = 0;
+		for(var i=0;i<nrCols;i++){
+			 if(this.header.arr[i].width!=='0px'){
+				 nrVisibleCols++;
+			 }
+		}
+		if(nrVisibleCols===0) nrVisibleCols=1; // no zero dividing
+		
 			for(var i=0;i<nrCols;i++){
                 if(this.header.arr[i].width!=='0px'){
 				elem = doc.createElement("th");
-                // Adding an id to each column header
-
+                // Adding an id to each column header to be able to sort them
                 elem.setAttribute('id',this.tableId+"_"+"col"+i); 
                 
+				// Computing the size of each column
                 if(this.header.arr[i].width){
                     aWidth = parseInt(this.header.arr[i].width);
-                    aWidth = aWidth-(24/nrCols);
+                    aWidth = aWidth-(24/nrVisibleCols);
                     elem.setAttribute('style','width:'+aWidth+'px;'); 
                 }
                 // Adding the title of each column header
@@ -497,24 +508,25 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 				aHead.appendChild(elem);
                 }
 			}
-              athead.appendChild(aHead); 
-            aTable.appendChild(athead); // adding the header (tr) to the table
-     var self = this;
+              athead.appendChild(aHead); // adding the header (tr) to div of class 'stayFixed' 
+              aTable.appendChild(athead); // adding the div to the table
+        var self = this;
 			// ------------- Building Body -----------------------------
-        
+			
+            // Creating a scrollable div (overflow-y) surrounding the body of the table
+		
         var atbody = doc.createElement('div');
             atbody.setAttribute('class','doscroll'); 
-         var aStyle = "overflow-y: scroll;";
+        var aStyle = "overflow-y: scroll;";
 
-            if(this.config.height){
+            if(this.config.height){ // If we have defined an height 
                 var anHeight = parseInt(this.config.height);
-                anHeight = anHeight - 24;
+                anHeight = anHeight - 24; // lowering by 24 px to figure out approximatly the height of the header
                 aStyle = aStyle+"height:"+anHeight+"px;max-height:"+anHeight+"px;";
             }
              atbody.setAttribute('style',aStyle); 
 
-            if(this.config.booModal){
-
+            if(this.config.booModal){ // I a modal is asked in the config
                 atbody.addEventListener("click",function(e){
                     var target = (e.target) ? e.target : e.srcElement;
                     var parent = target.parentNode;
