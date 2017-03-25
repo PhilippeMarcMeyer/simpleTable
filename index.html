@@ -20,7 +20,8 @@
     
     <p>Coding Langage Designers</p>
         <div id="zone"></div> <!-- The Grid zone-->
-    </div>
+		
+</div>
 <script>
     
 
@@ -29,7 +30,7 @@
     
     // Defining the header of the grid : colums names (matching data), types , titles and width
     // Supported types are : number, string and  mm-dd-yyyy, mm/dd/yyyy, dd-mm-yyyy, dd/mm/yyyy
- var aHeader = '{"arr":[{"name":"id","type":"protected","title":"id","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px"}]}';
+ var aHeader = '{"arr":[{"name":"id","type":"protected","title":"id","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px","list":"0,zero,1,one,2,two,3,three,4,four,5,five"}]}';
 
     // This json string should be provides by the back-end : here for demonstration purpose
     // It's an objet containing an array 'arr' of objects representing the rows of our grid
@@ -57,6 +58,7 @@ myGrid.SetTranslations(aTranslation); // Setting translation if needed
 myGrid.SetHeader(aHeader); // Setting the hearder with names, types and width
 myGrid.SetData(aData); // Setting the data to populate the rows
 myGrid.Draw(); // Drawing the grid in it's zone 
+
 
 
 

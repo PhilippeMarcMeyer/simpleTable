@@ -4,9 +4,11 @@ Here is a simpleGrid system with typed columns, scrollable, sortable, with a mod
 
 Work in progress !
 
-06/03/2017 : Modal position is kept throughout the session. A column can have 0px wide : invisible in table but show in modal and a type "protected" for readonly state in the modal.
+03/25/2017 : Added list to add a drop down in the modal
 
-04/03/2017 : Changed setAttributeNode to setAttribute to ensure IE 11 compatibility dropped "use strict" for the moment because of IE11
+03/06/2017 : Modal position is kept throughout the session. A column can have 0px wide : invisible in table but show in modal and a type "protected" for readonly state in the modal.
+
+03/04/2017 : Changed setAttributeNode to setAttribute to ensure IE 11 compatibility dropped "use strict" for the moment because of IE11
 
 03/03/2017 : The modal becomes draggable
 

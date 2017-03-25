@@ -57,6 +57,17 @@
      left: 125px;
      margin-bottom: 15px;   
     }
+.modal-content input:read-only {
+	color:#aaa;
+	 user-select: none;
+}
+    
+.modal-content select{
+     position:absolute;
+     width: 60%;
+     left: 125px;
+     margin-bottom: 15px;   
+    }
     
 .modal-content button{
  position:relative;

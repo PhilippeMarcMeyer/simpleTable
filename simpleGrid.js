@@ -1,3 +1,5 @@
+// Created by Philippe MEYER 2016-2017 //
+
 function SimpleGrid(zoneId, tableId, tableClass) {
     //"use strict";
 	this.doc = document;
@@ -30,6 +32,30 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.getData=function(){
        return JSON.stringify(this.data);
     }
+	
+	//------------------
+	
+	this.CreateSelect=function(aList,aName,aValue){
+	    var doc = this.doc;
+		var anOption;
+        var elem = doc.createElement("select");
+        elem.setAttribute('name',aName);
+        elem.setAttribute('id',aName);
+        var arr = aList.split(",");
+		for(var i = 0; i < arr.length;i+=2){
+			anOption = doc.createElement("option");
+			anOption.value = arr[i];
+			anOption.text = arr[i+1];
+			if(aValue===arr[i]){
+				anOption.selected = true;
+			}
+			elem.appendChild(anOption);
+
+		}
+        
+	    return elem;
+	}
+
     
     this.CreateInput=function(aType,aName,aValue){
         var doc = this.doc;
@@ -159,8 +185,9 @@ function SimpleGrid(zoneId, tableId, tableClass) {
          }
     
     this.showModal=function(rowId){
+		var row_prefix = this.tableId+"_row";
         if (rowId.length===0) return;
-        rowId = rowId.replace('tableId_row','');
+        rowId = rowId.replace(row_prefix,'');
         var item = '';
         var modalTitle = this.translate('Modifying');
         var lineOffset = parseInt(rowId);
@@ -190,7 +217,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 }
                 if(!doDrag){
                     type=type.toLowerCase();
-                    if(type!=='input' && type!=='button')
+                    if(type!=='input' && type!=='button' && type!=='select')
                         doDrag = true;
                 }
                 if(doDrag){
@@ -238,22 +265,20 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 
             aName = this.header.arr[i].name;
             aType = this.header.arr[i].type;
-                
-            elem = this.CreateInput(this.header.arr[i].type,this.header.arr[i].name,aValue)
-          
+			if(this.header.arr[i].list){
+				elem = this.CreateSelect(this.header.arr[i].list,this.header.arr[i].name,aValue); 
+			}
+			else
+				elem = this.CreateInput(this.header.arr[i].type,this.header.arr[i].name,aValue); 
+			
                 aDiv.appendChild(elem); 
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);
                 elem = doc.createElement("br");
-                aDiv.appendChild(elem);
-                
-
-                
+                aDiv.appendChild(elem);    
             }
-            
                             
                 elem = doc.createElement("button");
-				
                 elem.setAttribute('id','validate');
 				
                 item=this.translate('Validate');
@@ -275,8 +300,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                             if(ptr){
                                  val = ptr.value;
                                 aType = self.header.arr[i].type;
-                                if(aType==='mm-dd-yyyy' &  self.html5ImputDateSupport){ // English date
-                                    //            aaaa-mm-jj
+                                if(aType==='mm-dd-yyyy' &  self.html5ImputDateSupport){ // English date : aaaa-mm-jj
                                     val= val.substring(5,7)+"-"+val.substring(8,10)+"-"+val.substring(0,4)
                                 }
                                 else if(aType==='dd-mm-yyyy' &  self.html5ImputDateSupport){ // French date
