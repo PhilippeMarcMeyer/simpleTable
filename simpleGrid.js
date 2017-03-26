@@ -50,10 +50,28 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 				anOption.selected = true;
 			}
 			elem.appendChild(anOption);
-
 		}
         
 	    return elem;
+	}
+	
+	this.CreateCheckBox=function(aList,aName,aValue){
+		var doc = this.doc;
+        var val;
+		var arr = aList.split(",");
+		if(arr.length!==2)
+			return this.CreateInput('string',aName,aValue);
+		else{
+        var elem = doc.createElement("input");
+		elem.setAttribute('type','checkbox');
+        elem.setAttribute('name',aName);
+        elem.setAttribute('id',aName);
+        elem.setAttribute('value',aList); // We keep the list whole in order to be able to retrieve one of the two values
+		if(aValue===arr[1]){
+			elem.checked = true;
+			}
+			return elem;
+		}
 	}
 
     
@@ -61,7 +79,6 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         var doc = this.doc;
         var html_type,html_value,html_readOnly;
         var elem = doc.createElement("input");
-        
         
         html_value = aValue;
         html_type = 'text';
@@ -216,8 +233,9 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      if(!type) doDrag = true;
                 }
                 if(!doDrag){
+					if(elem.type==='checkbox')
+						type='checkbox';
                     type=type.toLowerCase();
-                    if(type!=='input' && type!=='button' && type!=='select')
                         doDrag = true;
                 }
                 if(doDrag){
@@ -265,7 +283,11 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 
             aName = this.header.arr[i].name;
             aType = this.header.arr[i].type;
-			if(this.header.arr[i].list){
+			
+			if(this.header.arr[i].cb_list){
+				elem = this.CreateCheckBox(this.header.arr[i].cb_list,this.header.arr[i].name,aValue); 
+			}
+			else if(this.header.arr[i].list){
 				elem = this.CreateSelect(this.header.arr[i].list,this.header.arr[i].name,aValue); 
 			}
 			else
@@ -298,7 +320,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                          val='';
                          ptr = self.doc.getElementById(self.header.arr[i].name);
                             if(ptr){
-                                 val = ptr.value;
+                                val = ptr.value;
                                 aType = self.header.arr[i].type;
                                 if(aType==='mm-dd-yyyy' &  self.html5ImputDateSupport){ // English date : aaaa-mm-jj
                                     val= val.substring(5,7)+"-"+val.substring(8,10)+"-"+val.substring(0,4)
@@ -312,6 +334,11 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                                 else if(aType==='dd/mm/yyyy' &  self.html5ImputDateSupport){ // French date
                                     val= val.substring(8,10)+"/"+val.substring(5,7)+"/"+val.substring(0,4)
                                 }
+								else if(self.header.arr[i].cb_list){
+									var arr = val.split(',');
+									if(arr.length===2)
+										if(ptr.checked) val=arr[1]; else val=arr[0];
+								}
                             }
                    
                             self.data.arr[lineOffset][self.header.arr[i].name]=val; 

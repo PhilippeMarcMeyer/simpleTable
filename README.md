@@ -4,7 +4,9 @@ Here is a simpleGrid system with typed columns, scrollable, sortable, with a mod
 
 Work in progress !
 
-03/25/2017 : Added list to add a drop down in the modal
+03/26/2017 : Added checkbox support in the modal with header cb_list attribute
+
+03/25/2017 : Added drop down in the modal header list attribute
 
 03/06/2017 : Modal position is kept throughout the session. A column can have 0px wide : invisible in table but show in modal and a type "protected" for readonly state in the modal.
 
