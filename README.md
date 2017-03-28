@@ -4,6 +4,12 @@ Here is a simpleGrid system with typed columns, scrollable, sortable, with a mod
 
 Work in progress !
 
+03/28/2017 : Added return false to my onclick events in the modal 
+             Make your own validation test for the modal with modalValidation() 
+			 placeholder and maxlength support in the modal
+
+03/26/2017 : Added checkbox support in the modal with header cb_list attribute
+
 03/26/2017 : Added checkbox support in the modal with header cb_list attribute
 
 03/25/2017 : Added drop down in the modal header list attribute

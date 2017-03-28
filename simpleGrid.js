@@ -18,6 +18,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
     this.allowSearch=false;
     this.dragObj=null;
     this.selectedRow;
+	this.modalValidation;
     
      var test = document.createElement("input");
      test.setAttribute("type", "date");
@@ -217,37 +218,10 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         if(ptr){
            ptr.innerHTML = ""; 
             var aDiv = doc.createElement("div");
-   
+               var elem,aValue,aName,aType,aTitle;
+
             aDiv.setAttribute('class','modal-content'); 
 			aDiv.setAttribute('id','modalRect'); 
-            aDiv.setAttribute('draggable','true'); 
-
-    
-            // Drag only if we are not targeting a button or a filed in the modal
-            aDiv.onmousedown = function (e) {
-                var doDrag = false;
-                var elem = (e.target || e.srcElement);
-                if(!elem) doDrag = true;
-                if(!doDrag){
-                    var type=elem.tagName;
-                     if(!type) doDrag = true;
-                }
-                if(!doDrag){
-					if(elem.type==='checkbox')
-						type='checkbox';
-                    type=type.toLowerCase();
-                        doDrag = true;
-                }
-                if(doDrag){
-                    _drag_init(this);
-                    return false;  
-                }else{
-					if(type==='input') elem.setSelectionRange(0, elem.value.length);
-                    return true;
-                }
-
-            };
-        
             // Cross to close modal
             var spanClose = doc.createElement("span");
          
@@ -259,13 +233,19 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             var txt = doc.createTextNode('X'); 
             spanClose.appendChild(txt); 
             aDiv.appendChild(spanClose); 
-			
-            var aH3 = doc.createElement("h3");
+			elem = doc.createElement("br");
+			aDiv.appendChild(elem);
+				
+            var aTitle = doc.createElement("div");
+			aTitle.setAttribute('class','sg_title');
+
             txt = doc.createTextNode(modalTitle); 
-            aH3.appendChild(txt);
-            aDiv.appendChild(aH3); 
+            aTitle.appendChild(txt);
+            aDiv.appendChild(aTitle); 
+			
+			  elem = doc.createElement("br");
+                aDiv.appendChild(elem);
             
-            var elem,aValue,aName,aType,aTitle;
             var nrCols = this.header.arr.length;
 			for(var i=0;i<nrCols;i++){
                 aTitle = this.header.arr[i].title;
@@ -290,30 +270,51 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 			else if(this.header.arr[i].list){
 				elem = this.CreateSelect(this.header.arr[i].list,this.header.arr[i].name,aValue); 
 			}
-			else
+			else{
 				elem = this.CreateInput(this.header.arr[i].type,this.header.arr[i].name,aValue); 
-			
+				 if(this.header.arr[i].placeholder){
+					elem.setAttribute('placeholder',this.header.arr[i].placeholder);
+				}
+				 if(this.header.arr[i].maxlength){
+					elem.setAttribute('maxlength',this.header.arr[i].maxlength);
+				}
+				
+				
+			}
                 aDiv.appendChild(elem); 
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);
                 elem = doc.createElement("br");
                 aDiv.appendChild(elem);    
             }
-                            
+                
+			 var aSpan = doc.createElement("span");
+			 aSpan.setAttribute('class','err_sg_modal');
+			 aDiv.appendChild(aSpan); 
+			 
+			elem = doc.createElement("br");
+			aDiv.appendChild(elem);
+
+						
                 elem = doc.createElement("button");
                 elem.setAttribute('id','validate');
-				
+				elem.setAttribute('class','sg_ok');
                 item=this.translate('Validate');
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
 				
                 elem.onclick = function() {
-                var ptr,lineOffset,nrCols;
-                lineOffset = self.offset;
-                if(lineOffset==-1){
-                    self.data.arr.push({});
-                    lineOffset = self.data.arr.length-1;
-                }
+					var booOK=true;
+					if(self.modalValidation){
+						booOK=self.modalValidation();
+					}
+				if(booOK){
+					var ptr,lineOffset,nrCols;
+					lineOffset = self.offset;
+					if(lineOffset==-1){
+						self.data.arr.push({});
+						lineOffset = self.data.arr.length-1;
+					}
                 nrCols = self.header.arr.length;
                 var val;
 			         for(var i=0;i<nrCols;i++){
@@ -346,23 +347,27 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                      }
                 
                 self.config.modal.style.display = "none";
-                self.saveModalCoordinates();
+               // self.saveModalCoordinates();
                 self.Draw();
+				
+				}
+				return false;
                 }
                 aDiv.appendChild(elem);
             
                 elem = doc.createElement("button");
 
                 elem.setAttribute('id','cancel');
-				
+				elem.setAttribute('class','sg_caution');
                 item = this.translate('Cancel'); 
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
 				
                 elem.onclick = function() {
-					self.saveModalCoordinates();
+					//self.saveModalCoordinates();
                     self.config.modal.style.display = "none";
-                    self.Draw();
+                    //self.Draw();
+					return false;
                 }
 				
                 aDiv.appendChild(elem);
@@ -370,6 +375,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                 elem = doc.createElement("button");
 				
                 elem.setAttribute('id','delete');
+				elem.setAttribute('class','sg_warning');
                 item = this.translate('Delete'); 
                 txt = doc.createTextNode(item); 
                 elem.appendChild(txt);
@@ -377,10 +383,10 @@ function SimpleGrid(zoneId, tableId, tableClass) {
                     var lineOffset = self.offset;
                     self.data.arr.splice(lineOffset,1);
                     self.selectedRow="";
-				    self.saveModalCoordinates();
+				    //self.saveModalCoordinates();
                     self.config.modal.style.display = "none";
-                    self.Draw();
-
+                self.Draw();
+				return false;
                 }
                 aDiv.appendChild(elem);
 
@@ -391,12 +397,12 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             
             ptr.appendChild(aDiv); 
                 
-            
+         
             var close_sg_modal = document.getElementById("close_sg_modal");
 
 
             close_sg_modal.onclick = function() {
-				self.saveModalCoordinates();
+				//self.saveModalCoordinates();
                 self.config.modal.style.display = "none";
                 self.Draw();
             }
@@ -549,7 +555,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
 				// Computing the size of each column
                 if(this.header.arr[i].width){
                     aWidth = parseInt(this.header.arr[i].width);
-                    aWidth = aWidth-(24/nrVisibleCols);
+                   // aWidth = aWidth-(20/nrVisibleCols);
                     elem.setAttribute('style','width:'+aWidth+'px;'); 
                 }
                 // Adding the title of each column header
@@ -685,12 +691,13 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         elem.appendChild(txt);
         elem.onclick = function() {
                 self.showModal('-1');
+				return false;
             }
         elem.setAttribute('style','font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;');
         this.zone.appendChild(elem);
         
              // Creating the 'Save' Button right of footer
-        
+     
         elem = doc.createElement("button");
 
         elem.setAttribute('id','simpleGrid_Save');
@@ -703,6 +710,8 @@ function SimpleGrid(zoneId, tableId, tableClass) {
         }
         elem.setAttribute('style','font-weight:bold;padding:3px;padding-left:20px;padding-right:20px;float:right;margin-top:-10px;');
         this.zone.appendChild(elem);
+	
+		
         
        var ptr = this.doc.getElementById('sg_search');
         if(ptr){
@@ -710,7 +719,7 @@ function SimpleGrid(zoneId, tableId, tableClass) {
             ptr.focus();
 
             if(strLength>0){
-                ptr.setSelectionRange(strLength, strLength);
+           ptr.setSelectionRange(strLength, strLength);
             }
         }
         
@@ -726,78 +735,21 @@ function SimpleGrid(zoneId, tableId, tableClass) {
              this.header.arr[i].ptr.addEventListener("click",function(e){
                var target = (e.target) ? e.target : e.srcElement;
                self.sort(target.id);
-            });} // Adding an Event listener 
+            });} 
         }
         
     }
     
 }
 
-// by https://jsfiddle.net/user/tovic/fiddles/ ++ Other contributions + personal adaptations
-var selected = null, // Object of the element to be moved
-    x_pos = 0, y_pos = 0, // Stores x & y coordinates of the mouse pointer
-    x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element
-
-// Will be called when user starts dragging an element
-function _drag_init(elem) {
-    // Store the object of the element which needs to be moved
-    selected = elem;
-    x_pos = getMouseX();
-    y_pos = getMouseY();
-    x_elem = x_pos - selected.offsetLeft;
-    y_elem = y_pos - selected.offsetTop;
-
-}
-
-// Will be called when user dragging an element
-function _move_elem(e) {
-    x_pos = getMouseX();
-    y_pos = getMouseY();
-    if (selected !== null) {
-        selected.style.position='absolute'; // Only now !
-        selected.style.left = (x_pos - x_elem) + 'px';
-        selected.style.top = (y_pos - y_elem) + 'px';
-        
-    }
-}
-
-// Destroy the object when we are done
-function _destroy() {
-    selected = null;
-}
-
-
-
-document.onmousemove = _move_elem;
-document.onmouseup = _destroy;
-
-//http://stackoverflow.com/users/1033808/paul-hiemstra
-
-var x = 0;
-var y = 0;
-
-document.addEventListener('mousemove', onMouseMove, false)
-
-function onMouseMove(e){
-    x = e.clientX;
-    y = e.clientY;
-}
-
-function getMouseX() {
-    return x;
-}
-
-function getMouseY() {
-    return y;
-}
-
-function getFocus(){
-var focused = document.activeElement;
-if (!focused || focused == document.body)
-    focused = null;
-else if (document.querySelector)
-    focused = document.querySelector(":focus");
-return focused;
-}
+ function $get(id){ 
+     var prefix= id.substr(0,1);
+     if(prefix=="#" || prefix=="."){
+         return document.querySelector(id);
+     }
+     else {
+         return document.getElementById(id);
+     }     
+ }
 
 

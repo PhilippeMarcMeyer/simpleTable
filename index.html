@@ -15,7 +15,7 @@
 </head>
 
   <body>
-<div id="main">
+<div id="main" class="grid_parent">
     <div id="myModal" class="modal" ></div> <!-- The modal zone-->
     
     <p>Coding Langage Designers</p>
@@ -30,7 +30,7 @@
     
     // Defining the header of the grid : colums names (matching data), types , titles and width
     // Supported types are : number, string and  mm-dd-yyyy, mm/dd/yyyy, dd-mm-yyyy, dd/mm/yyyy
- var aHeader = '{"arr":[{"name":"id","type":"protected","title":"id","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Langage","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px","list":"0,zero,1,one,2,two,3,three,4,four,5,five"},{"name":"useit","type":"string","title":"Use it ?","width":"0px","cb_list":"no,yes"}]}';
+ var aHeader = '{"arr":[{"name":"id","type":"protected","title":"Key","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px","placeholder":"Name your hero !"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Language","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px","list":"0,zero,1,one,2,two,3,three,4,four,5,five"},{"name":"useit","type":"string","title":"Use it ?","width":"0px","cb_list":"no,yes"}]}';
 
     // This json string should be provides by the back-end : here for demonstration purpose
     // It's an objet containing an array 'arr' of objects representing the rows of our grid
@@ -47,7 +47,28 @@ var aTranslation ='{"New":"New","Modifying":"Modifying","Adding":"Adding","Delet
 var myGrid = new SimpleGrid("zone","tableId","grid-table grid-table-1");
     
 myGrid.SetConfig(aConfig); // Settting the config
-    
+myGrid.modalValidation = function(){//Make your own validation test for the modal
+	var ok=true;
+	var T_Err="";
+	var lastname = $get('lastname').value;
+	var language = $get('langage').value;
+
+	if(lastname.length===0){
+			ok=false;
+			T_Err="LastName is mandatory";
+	}
+	if(ok){
+		if(langage.length===0){
+		  ok=false;
+		  T_Err="Language is mandatory";
+		}
+	}
+	if(!ok){
+		$get(".err_sg_modal").innerHTML=T_Err;
+	}
+	return ok;
+}
+
 myGrid.config.save = function(){// Declaring the saving function
     // retreaving data
     var json = myGrid.getData();
