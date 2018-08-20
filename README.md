@@ -36,7 +36,7 @@ Delete + add new functionalities.
 
 Here is a demo :
 
-https://philippemarcmeyer.github.io/index.html#vanillajs
+https://philippemarcmeyer.github.io/demo-simpleGrid.html
 
 Philippe MEYER
 
