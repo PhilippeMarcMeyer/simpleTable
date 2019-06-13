@@ -1,90 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">    
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>SimpleTable</title>
+		<link href="simpleTable.css" rel="stylesheet" type="text/css">
+		<script src="simpleTable.js"></script>
+	</head>
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<body>
+		<div id="main" class="grid_parent">
+			<div id="myModal" class="modal" ></div> <!-- The modal zone-->
+			<p>Coding Langage Designers</p>
+			<div id="zone"></div> <!-- The Table zone-->
+		</div>
+		<script>
+			   // Settings like width and height, le id of the modal zone.  allowSearch gives you a search field
+			 var aConfig ='{"width":"700px","height":"316px","modal":"myModal","allowSearch":"yes"}';
+				
+				// Defining the header of the grid : colums names (matching data), types , titles and width
+				// Supported types are : number, string and  mm-dd-yyyy, mm/dd/yyyy, dd-mm-yyyy, dd/mm/yyyy
+			 var aHeader = '{"arr":[{"name":"id","type":"protected","title":"Key","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px","placeholder":"Name your hero !"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Language","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px","list":"0,zero,1,one,2,two,3,three,4,four,5,five"},{"name":"useit","type":"string","title":"Use it ?","width":"0px","cb_list":"no,yes"}]}';
 
-    <title>SimpleGrid</title>
-    <link href="simpleTable.css" rel="stylesheet" type="text/css">
-    <script src="simpleTable.js"></script>
+				// This json string should be provides by the back-end : here for demonstration purpose
+				// It's an objet containing an array 'arr' of objects representing the rows of our grid
+				// You provide for each cell, the name (which must match the name in the header) and the value
+			var aData = '{"arr": [{"id": "1","firstname": "Bjarne ","lastname": "Stroustrup","birthdate": "12-30-1950","langage": "C++", "note":"","useit":"no"}, {"id": "2","firstname": "Denis","lastname": "Ritchie","birthdate": "09-09-1941","langage": "C", "note":"","useit":"no"}, {"id": "3","firstname": "Kenneth","lastname": "Thompson","birthdate": "02-04-1943","langage": "Go", "note":"","useit":"no"}, {"id": "4","firstname": "James","lastname": "Gosling","birthdate": "05-19-1955","langage": "Java", "note":"","useit":"no"}, {"id": "5","firstname": "Brendan ","lastname": "Eich","birthdate": "07-04-1961","langage": "Javascript", "note":"my fav","useit":"yes"}, {"id": "6","firstname": "Guido","lastname": "Van Rossum","birthdate": "01-31-1956","langage": "Python","useit":"yes"}, {"id": "7","firstname": "Yukihiro","lastname": "Matsumoto","birthdate": "04-14-1965","langage": "Ruby", "note":"my fav","useit":"no"}, {"id": "8","firstname": "Roberto","lastname": "Lerusalimschy","birthdate": "05-21-1960","langage": "Lua", "note":"","useit":"no"}, {"id": "9","firstname": "Rasmus","lastname": "Lerdorf","birthdate": "11-22-1968","langage": "Php", "note":"","useit":"yes"}, {"id": "10","firstname": "Jean","lastname": "Ichbiah","birthdate": "03-25-1940","langage": "Ada", "note":"","useit":"no"}]}';
+				
+				// Optional feature (you don't need to set it via SetTranslations)
+				// By default a button New title is 'New', you change it to localize or just to provide another title like "Add" 
+				// Don't change the key, change the value ex : "New":"Nuevo" (Nuevo is new in spanish)
+				
+			var aTranslation ='{"New":"New","Modifying":"Modifying","Adding":"Adding","Delete":"Delete","Cancel":"Cancel","Validate":"Validate","Search":"Search","Save":"Save"}';
+				
+				// Calling SimpleTable : param1 : grid zone id, param2 : id of the grid itself, param3 : grid class (I propose grid-table grid-table-1 but you may write your own css)
+			var myTable = new SimpleTable("zone","tableId","grid-table grid-table-1");
+				
+			myTable.SetConfig(aConfig); // Settting the config
+			myTable.modalValidation = function(){//Make your own validation test for the modal
+				var ok=true;
+				var T_Err="";
+				var lastname = $get('lastname').value;
+				var language = $get('langage').value;
 
-</head>
+				if(lastname.length===0){
+						ok=false;
+						T_Err="LastName is mandatory";
+				}
+				if(ok){
+					if(langage.length===0){
+					  ok=false;
+					  T_Err="Language is mandatory";
+					}
+				}
+				if(!ok){
+					$get(".err_sg_modal").innerHTML=T_Err;
+				}
+				return ok;
+			}
 
-  <body>
-<div id="main" class="grid_parent">
-    <div id="myModal" class="modal" ></div> <!-- The modal zone-->
-    
-    <p>Coding Langage Designers</p>
-        <div id="zone"></div> <!-- The Grid zone-->
-		
-</div>
-<script>
-    
-
-   // Settings like width and height, le id of the modal zone.  allowSearch gives you a search field
- var aConfig ='{"width":"700px","height":"316px","modal":"myModal","allowSearch":"yes"}';
-    
-    // Defining the header of the grid : colums names (matching data), types , titles and width
-    // Supported types are : number, string and  mm-dd-yyyy, mm/dd/yyyy, dd-mm-yyyy, dd/mm/yyyy
- var aHeader = '{"arr":[{"name":"id","type":"protected","title":"Key","width":"0px"},{"name":"firstname","type":"string","title":"First name","width":"200px"},{"name":"lastname","type":"string","title":"Last name","width":"200px","placeholder":"Name your hero !"},{"name":"birthdate","type":"mm-dd-yyyy","title":"Birthdate","width":"150px"},{"name":"langage","type":"string","title":"Language","width":"150px"},{"name":"note","type":"string","title":"note","width":"0px","list":"0,zero,1,one,2,two,3,three,4,four,5,five"},{"name":"useit","type":"string","title":"Use it ?","width":"0px","cb_list":"no,yes"}]}';
-
-    // This json string should be provides by the back-end : here for demonstration purpose
-    // It's an objet containing an array 'arr' of objects representing the rows of our grid
-    // You provide for each cell, the name (which must match the name in the header) and the value
-var aData = '{"arr": [{"id": "1","firstname": "Bjarne ","lastname": "Stroustrup","birthdate": "12-30-1950","langage": "C++", "note":"","useit":"no"}, {"id": "2","firstname": "Denis","lastname": "Ritchie","birthdate": "09-09-1941","langage": "C", "note":"","useit":"no"}, {"id": "3","firstname": "Kenneth","lastname": "Thompson","birthdate": "02-04-1943","langage": "Go", "note":"","useit":"no"}, {"id": "4","firstname": "James","lastname": "Gosling","birthdate": "05-19-1955","langage": "Java", "note":"","useit":"no"}, {"id": "5","firstname": "Brendan ","lastname": "Eich","birthdate": "07-04-1961","langage": "Javascript", "note":"my fav","useit":"yes"}, {"id": "6","firstname": "Guido","lastname": "Van Rossum","birthdate": "01-31-1956","langage": "Python","useit":"yes"}, {"id": "7","firstname": "Yukihiro","lastname": "Matsumoto","birthdate": "04-14-1965","langage": "Ruby", "note":"my fav","useit":"no"}, {"id": "8","firstname": "Roberto","lastname": "Lerusalimschy","birthdate": "05-21-1960","langage": "Lua", "note":"","useit":"no"}, {"id": "9","firstname": "Rasmus","lastname": "Lerdorf","birthdate": "11-22-1968","langage": "Php", "note":"","useit":"yes"}, {"id": "10","firstname": "Jean","lastname": "Ichbiah","birthdate": "03-25-1940","langage": "Ada", "note":"","useit":"no"}]}';
-    
-    // Optional feature (you don't need to set it via SetTranslations)
-    // By default a button New title is 'New', you change it to localize or just to provide another title like "Add" 
-    // Don't change the key, change the value ex : "New":"Nuevo" (Nuevo is new in spanish)
-    
-var aTranslation ='{"New":"New","Modifying":"Modifying","Adding":"Adding","Delete":"Delete","Cancel":"Cancel","Validate":"Validate","Search":"Search","Save":"Save"}';
-    
-    // Calling SimpleGrid : param1 : grid zone id, param2 : id of the grid itself, param3 : grid class (I propose grid-table grid-table-1 but you may write your own css)
-var myGrid = new SimpleGrid("zone","tableId","grid-table grid-table-1");
-    
-myGrid.SetConfig(aConfig); // Settting the config
-myGrid.modalValidation = function(){//Make your own validation test for the modal
-	var ok=true;
-	var T_Err="";
-	var lastname = $get('lastname').value;
-	var language = $get('langage').value;
-
-	if(lastname.length===0){
-			ok=false;
-			T_Err="LastName is mandatory";
-	}
-	if(ok){
-		if(langage.length===0){
-		  ok=false;
-		  T_Err="Language is mandatory";
-		}
-	}
-	if(!ok){
-		$get(".err_sg_modal").innerHTML=T_Err;
-	}
-	return ok;
-}
-
-myGrid.config.save = function(){// Declaring the saving function
-    // retreaving data
-    var json = myGrid.getData();
-    // You got to make your own saving function to localstorage or back-end !
-    alert('You got to send this Json string to your backend !\r\n'+json);
-}
-myGrid.SetTranslations(aTranslation); // Setting translation if needed    
-myGrid.SetHeader(aHeader); // Setting the hearder with names, types and width
-myGrid.SetData(aData); // Setting the data to populate the rows
-myGrid.Draw(); // Drawing the grid in it's zone 
-
-
-
-
-</script>
-
-  
-
-</body></html>
+			myTable.config.save = function(){// Declaring the saving function
+				// retreaving data
+				var json = myTable.getData();
+				// You got to make your own saving function to localstorage or back-end !
+				alert('You got to send this Json string to your backend !\r\n'+json);
+			}
+			myTable.SetTranslations(aTranslation); // Setting translation if needed    
+			myTable.SetHeader(aHeader); // Setting the hearder with names, types and width
+			myTable.SetData(aData); // Setting the data to populate the rows
+			myTable.Draw(); // Drawing the grid in it's zone 
+		</script>
+	</body>
+</html>
