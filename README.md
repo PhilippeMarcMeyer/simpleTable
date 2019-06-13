@@ -1,8 +1,8 @@
-# simpleGrid
+# simpleTable
 
-Here is a simpleGrid system with typed columns, scrollable, sortable, with a modal to enter or modify data.
+Here is a simple Table system with typed columns, scrollable, sortable, with a modal to enter or modify data.
 
-Work in progress !
+06/13/2019 : Renamed to simpleTable
 
 03/28/2017 : Added return false to my onclick events in the modal 
              Make your own validation test for the modal with modalValidation() 
@@ -47,9 +47,8 @@ Features to develop :
 
 # Description
 
-SimpleGrid was written in pure javascript with no dependency, for the exercice !
+SimpleTable was written in pure javascript with no dependency, for the exercice !
 
-I would love to make a jQuery plugin but for that I've got to pratice a bit (you may help me)
 
 Here is a fully commented example :
 
@@ -74,28 +73,22 @@ var aData = '{"arr":[{"firstname":"Bjarne ","lastname":"Stroustrup","birthdate":
 var aTranslation ='{"New":"New","Modifying":"Modifying","Adding":"Adding","Delete":"Delete","Cancel":"Cancel","Validate":"Validate","Search":"Search","Save":"Save"}';
     
     // Calling SimpleGrid : param1 : grid zone id, param2 : id of the grid itself, param3 : grid class (I propose grid-table grid-table-1 but you may write your own css)
-var myGrid = new SimpleGrid("zone","tableId","grid-table grid-table-1");
+var myTable= new SimpleTable("zone","tableId","grid-table grid-table-1");
     
-myGrid.SetConfig(aConfig); // Settting the config
+myTable.SetConfig(aConfig); // Settting the config
     
-myGrid.config.save = function(){// Declaring the saving function
+myTable.config.save = function(){// Declaring the saving function
     // retreaving data
-    var json = myGrid.getData();
+    var json = myTable.getData();
     // You got to make your own saving function to localstorage or back-end !
     alert('You got to send this Json string to your backend !\r\n'+json);
 }
-myGrid.SetTranslations(aTranslation); // Setting translation if needed    
-myGrid.SetHeader(aHeader); // Setting the hearder with names, types and width
-myGrid.SetData(aData); // Setting the data to populate the rows
-myGrid.Draw(); // Drawing the grid in it's zone 
+myTable.SetTranslations(aTranslation); // Setting translation if needed    
+myTable.SetHeader(aHeader); // Setting the hearder with names, types and width
+myTable.SetData(aData); // Setting the data to populate the rows
+myTable.Draw(); // Drawing the grid in it's zone 
 
 
 ```
-
-
-
-
-
-
 
 
