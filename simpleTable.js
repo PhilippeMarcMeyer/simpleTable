@@ -1,6 +1,6 @@
 // Created by Philippe MEYER 2016-2017 //
 
-function SimpleGrid(zoneId, tableId, tableClass) {
+function SimpleTable(zoneId, tableId, tableClass) {
     //"use strict";
 	this.doc = document;
     this.zoneId = zoneId;
