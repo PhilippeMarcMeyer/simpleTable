@@ -36,7 +36,7 @@ Delete + add new functionalities.
 
 Here is a demo :
 
-https://philippemarcmeyer.github.io/demo-simpleGrid.html
+https://philippemarcmeyer.github.io/simpleTable/
 
 Philippe MEYER
 
